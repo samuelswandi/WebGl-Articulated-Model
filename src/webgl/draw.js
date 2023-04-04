@@ -1,5 +1,56 @@
 import { degToRad, mat4 } from "../math/mat4.js";
 
+function drawScenes(webGlManager) {
+	var gl = webGlManager.gl;
+	var programInfo = webGlManager.programInfo;
+	var buffers = webGlManager.buffers;
+	var states = webGlManager.states;
+	
+	gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+	gl.clearDepth(1.0); // Clear everything
+	gl.enable(gl.DEPTH_TEST); // Enable depth testing
+	gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+	// const i = 0
+	for (let i = 0 ; i < states.length ; i++) {
+		const projectionMatrix = getProjectedMatrix(states[i], gl);
+		const modelViewMatrix = getTransformedMVMatrix(states[i]);
+		const normalMatrix = getTransformedNMatrix(states[i], modelViewMatrix);
+	
+		setPositionAttribute(gl, buffers[i], programInfo);
+		setColorAttribute(gl, buffers[i], programInfo);
+		setNormalAttribute(gl, buffers[i], programInfo);
+	
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers[i].indices);
+		gl.useProgram(programInfo.program);
+		gl.uniformMatrix4fv(
+			programInfo.uniformLocations.projectionMatrix,
+			false,
+			new Float32Array(projectionMatrix)
+		);
+		gl.uniformMatrix4fv(
+			programInfo.uniformLocations.modelViewMatrix,
+			false,
+			new Float32Array(modelViewMatrix)
+		);
+		gl.uniformMatrix4fv(
+			programInfo.uniformLocations.normalMatrix,
+			false,
+			normalMatrix,
+			new Float32Array(normalMatrix)
+		);
+	
+		gl.uniform1i(programInfo.uniformLocations.shadingLocation, states[i].isShading);
+		{
+			const vertexCount = states[i].shape.indices.length;
+			const type = gl.UNSIGNED_SHORT;
+			const offset = 0;
+			gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
+		}
+	}
+}
+
 function drawScene(webGlManager) {
 	var gl = webGlManager.gl;
 	var programInfo = webGlManager.programInfo;
@@ -206,4 +257,4 @@ function setColorAttribute(gl, buffers, programInfo) {
 	gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
 }
 
-export { drawScene };
+export { drawScene, drawScenes };

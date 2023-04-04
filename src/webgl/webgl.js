@@ -3,14 +3,15 @@ import { initShaderProgram } from "./shader.js";
 
 export class WebGlManager {
 	gl;
-	state;
+	states;
 	program;
 	buffers;
 	programInfo;
 
-	constructor(gl, state) {
+	constructor(gl, states) {
 		this.gl = gl;
-		this.state = state;
+		this.states = states;
+		this.buffers = [];
 	}
 
 	init() {
@@ -54,6 +55,9 @@ export class WebGlManager {
 			},
 		};
 
-		this.buffers = initBuffers(this.gl, this.state);
+		// this.buffers = initBuffers(this.gl, this.state);
+		for (let i = 0; i < this.states.length; i++) {
+			this.buffers.push(initBuffers(this.gl, this.states[i]));
+		}
 	}
 }

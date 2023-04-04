@@ -1,20 +1,35 @@
 import { importBaseShape } from "./files/import.js";
-import { drawScene } from "./webgl/draw.js";
+import { drawScene, drawScenes } from "./webgl/draw.js";
 import { WebGlManager } from "./webgl/webgl.js";
+import { Man } from "./test/man.js";
 
-var state = {
-	// animation: true, idk if this exist
-	cubeRotation: 0.0,
-	projectionType: "perspective", // Projection type
-	isShading: true,
-	shape: importBaseShape("hollow-cube"),
-	transformation: {
-		translation: [-0.0, 0.0, -10.0],
-		rotation: [0, 0, (Math.PI / 180) * 30],
-		scale: [1,1,1],
-		cameraRotation: [0,0],
-	},
-};
+var states = [];
+
+const drawModel = (gl, model) => {
+	if (model.length == 0) {
+		return;
+	}
+
+	let state = {
+		// animation: true, idk if this exist
+		projectionType: model["projection"],
+		isShading: true,
+		shape: importBaseShape(model["shape"]),
+		transformation: {
+			translation: model["trans_obj"],
+			rotation: model["rot_obj"],
+			scale: model["scale_obj"],
+			cameraRotation: [0,0],
+		},
+	};
+
+	states.push(state);
+
+	for (let i = 0 ; i < model["children"].length ; i++) {
+		drawModel(gl, model["children"][i])
+	}
+	
+}
 
 function main() {
     const canvas = document.querySelector("#canvas");
@@ -26,12 +41,13 @@ function main() {
 		return;
 	}
 
-    // ini web gl manager
-    var webGlManager = new WebGlManager(gl, state)
+	drawModel(gl, Man);
+
+    var webGlManager = new WebGlManager(gl, states)
     webGlManager.init()
 
 	function render() {
-		drawScene(webGlManager);
+		drawScenes(webGlManager);
 		requestAnimationFrame(render);
 	}
 	requestAnimationFrame(render);
