@@ -1,6 +1,7 @@
 import { hollowCube } from "../test/hollow-cube.js";
 import { hollowHypercube } from "../test/hollow-hypercube.js";
 import { hollowPrism } from "../test/hollow-prism.js";
+import { Cube } from "../test/cube.js";
 import { complex } from "../test/complex.js";
 import { Shape } from "./shape.js";
 
@@ -19,7 +20,6 @@ export function importBaseShape(type) {
 		shape.colors = parsedData["colors"];
 		shape.indices = parsedData["indices"];
 		shape.setFov("30");
-		return shape;
 	} else if (type == "hollow-hypercube") {
 		parsedData = JSON.parse(hollowHypercube);
 
@@ -27,7 +27,6 @@ export function importBaseShape(type) {
 		shape.colors = parsedData["colors"];
 		shape.indices = parsedData["indices"];
 		shape.setFov("30");
-		return shape;
 	} else if (type == "hollow-prism") {
 		parsedData = JSON.parse(hollowPrism);
 
@@ -35,7 +34,6 @@ export function importBaseShape(type) {
 		shape.colors = parsedData["colors"];
 		shape.indices = parsedData["indices"];
 		shape.setFov("30");
-		return shape;
 	}  else if (type == "complex") {
 		parsedData = JSON.parse(complex);
 
@@ -43,6 +41,12 @@ export function importBaseShape(type) {
 		shape.colors = parsedData["colors"];
 		shape.indices = parsedData["indices"];
 		shape.setFov("30");
-		return shape;
+	} else if (type == "cube" ){
+		shape.vertices = Cube["vertices"];
+		shape.colors = Cube["colors"];
+		shape.indices = Cube["indices"];
+		shape.setFov("30");
 	}
+
+	return shape;
 }
