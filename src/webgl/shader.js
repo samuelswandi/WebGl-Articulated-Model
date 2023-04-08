@@ -2,7 +2,6 @@ const vsSource = `
     attribute vec4 aVertexPosition;
     attribute vec3 aVertexNormal;
 	attribute vec4 aVertexColor;
-	uniform mat4 u_matrix;
 
     uniform mat4 uNormalMatrix;
     uniform mat4 uModelViewMatrix;
