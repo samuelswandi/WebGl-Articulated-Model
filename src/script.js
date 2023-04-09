@@ -1,7 +1,8 @@
 import { importBaseShape } from "./files/import.js";
 import { drawScene, drawScenes } from "./webgl/draw.js";
 import { WebGlManager } from "./webgl/webgl.js";
-import { Man } from "./test/man.js";
+// import { Man } from "./test/man.js";
+import { Sheep } from "./test/sheep.js";
 
 var states = [];
 
@@ -41,7 +42,7 @@ function main() {
 		return;
 	}
 
-	drawModel(gl, Man);
+	drawModel(gl, Sheep);
 
     var webGlManager = new WebGlManager(gl, states)
     webGlManager.init()
