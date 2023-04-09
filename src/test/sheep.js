@@ -1,6 +1,6 @@
 import { TEXTURE, PROJECTION, SHAPE } from "../types/const.js";
 
-export const Dog = {
+export const Sheep = {
     "name": "Body",
     "shape" : SHAPE.CUBE,
     "texture": TEXTURE.ENVIRONMENT,
