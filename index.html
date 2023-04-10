@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/src/style.css" />
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<canvas id="canvas" width="800" height="800"></canvas>
+		</div>
+
+		<div>
+			<div class="translate-x">
+				<label for="translate-x">Translate x</label>
+				<input
+					class="form-range"
+					type="range"
+					id="translate-x"
+					min="-5"
+					max="5"
+					value="0"
+					step="0.000001"
+				/>
+			</div>
+			<div class="translate-y">
+				<label for="translate-y">Translate y</label>
+				<input
+					class="form-range"
+					type="range"
+					id="translate-y"
+					min="-5"
+					max="5"
+					value="0"
+					step="0.000001"
+				/>
+			</div>
+			<div class="translate-z">
+				<label for="translate-z">Translate z</label>
+				<input
+					class="form-range"
+					type="range"
+					id="translate-z"
+					min="-20"
+					max="0"
+					value="-10"
+					step="0.000001"
+				/>
+			</div>
+			<div class="rotate-x">
+				<label for="rotate-x">Rotate x</label>
+				<input
+					class="form-range"
+					type="range"
+					id="rotate-x"
+					min="-360"
+					max="360"
+					value="0"
+					step="0.01"
+				/>
+			</div>
+			<div class="rotate-y">
+				<label for="rotate-y">Rotate y</label>
+				<input
+					class="form-range"
+					type="range"
+					id="rotate-y"
+					min="-360"
+					max="360"
+					value="0"
+					step="0.01"
+				/>
+			</div>
+			<div class="rotate-z">
+				<label for="rotate-z">Rotate z</label>
+				<input
+					class="form-range"
+					type="range"
+					id="rotate-z"
+					min="-360"
+					max="360"
+					value="0"
+					step="0.01"
+				/>
+			</div>
+
+			<div class="scale-x">
+				<label for="scale-x">Scale x</label>
+				<input
+					class="form-range"
+					type="range"
+					id="scale-x"
+					min="0"
+					max="5"
+					value="1"
+					step="0.01"
+				/>
+			</div>
+			<div class="scale-y">
+				<label for="scale-y">Scale y</label>
+				<input
+					class="form-range"
+					type="range"
+					id="scale-y"
+					min="0"
+					max="5"
+					value="1"
+					step="0.01"
+				/>
+			</div>
+			<div class="scale-z">
+				<label for="scale-z">Scale z</label>
+				<input
+					class="form-range"
+					type="range"
+					id="scale-z"
+					min="0"
+					max="5"
+					value="1"
+					step="0.01"
+				/>
+			</div>
+
+			<div>
+				<label for="shading">Shading</label>
+				<input id="shading" type="checkbox" checked="checked" />
+			</div>
+			<div class="camera-angle">
+				<label for="camera-angle"
+					> camera angle</label
+				>
+				<input
+					class="form-range"
+					type="range"
+					id="camera-angle"
+					min="-180"
+					max="180"
+					value="0"
+					step="1"
+				/>
+			</div>
+			<div class="camera-radius">
+				<label for="camera-radius"
+					>camera radius</label
+				>
+				<input
+					class="form-range"
+					type="range"
+					id="camera-radius"
+					min="0"
+					max="1000"
+					value="500"
+					step="1"
+				/>
+			</div>
+		</div>
+	</body>
+	<script type="module" src="/src/main.ts"></script>
+</html>

@@ -1,3 +1,4 @@
+
 /**
  * @description Convert radian to degree.
  * @param {number} r
@@ -5,6 +6,10 @@
  */
 function radToDeg(r) {
 	return (r * 180) / Math.PI;
+}
+
+function isPowerOf2(value) {
+    return (value & (value - 1)) === 0;
 }
 
 /**
@@ -73,7 +78,7 @@ function getVectorNormal(vpos) {
 	return vNormals;
 }
 
-export const mat4 = {
+const m4 = {
 	/**
 	 * @description Create lookAt matrix.
 	 * @param {number[]} cameraPosition - camera position
@@ -210,7 +215,7 @@ export const mat4 = {
 		let cotP = -1 / Math.tan(p);
 
 		let matrix = [1, 0, cotT, 0, 0, 1, cotP, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-		return mat4.transpose(matrix);
+		return m4.transpose(matrix);
 	},
 
 	/**
@@ -528,7 +533,7 @@ export const mat4 = {
 	 * @returns {number[][]} translated matrix
 	 **/
 	translate: function (m, tx, ty, tz) {
-		return mat4.multiply(m, mat4.translation(tx, ty, tz));
+		return m4.multiply(m, m4.translation(tx, ty, tz));
 	},
 
 	/**
@@ -538,7 +543,7 @@ export const mat4 = {
 	 * @returns {number[][]} rotated matrix
 	 **/
 	xRotate: function (m, angleInRadians) {
-		return mat4.multiply(m, mat4.xRotation(angleInRadians));
+		return m4.multiply(m, m4.xRotation(angleInRadians));
 	},
 
 	/**
@@ -548,7 +553,7 @@ export const mat4 = {
 	 * @returns {number[][]} rotated matrix
 	 **/
 	yRotate: function (m, angleInRadians) {
-		return mat4.multiply(m, mat4.yRotation(angleInRadians));
+		return m4.multiply(m, m4.yRotation(angleInRadians));
 	},
 
 	/**
@@ -558,7 +563,7 @@ export const mat4 = {
 	 * @returns {number[][]} rotated matrix
 	 **/
 	zRotate: function (m, angleInRadians) {
-		return mat4.multiply(m, mat4.zRotation(angleInRadians));
+		return m4.multiply(m, m4.zRotation(angleInRadians));
 	},
 
 	/**
@@ -570,15 +575,23 @@ export const mat4 = {
 	 * @returns {number[][]} scaled matrix
 	 **/
 	scale: function (m, sx, sy, sz) {
-		return mat4.multiply(m, mat4.scaling(sx, sy, sz));
+		return m4.multiply(m, m4.scaling(sx, sy, sz));
 	},
+
+	transformPoint: function(m, v, dst) {
+		dst = dst || [];
+		var v0 = v[0];
+		var v1 = v[1];
+		var v2 = v[2];
+		var d = v0 * m[0 * 4 + 3] + v1 * m[1 * 4 + 3] + v2 * m[2 * 4 + 3] + m[3 * 4 + 3];
+	
+		dst[0] = (v0 * m[0 * 4 + 0] + v1 * m[1 * 4 + 0] + v2 * m[2 * 4 + 0] + m[3 * 4 + 0]) / d;
+		dst[1] = (v0 * m[0 * 4 + 1] + v1 * m[1 * 4 + 1] + v2 * m[2 * 4 + 1] + m[3 * 4 + 1]) / d;
+		dst[2] = (v0 * m[0 * 4 + 2] + v1 * m[1 * 4 + 2] + v2 * m[2 * 4 + 2] + m[3 * 4 + 2]) / d;
+	
+		return dst;
+	  }
 };
 
-export {
-	radToDeg,
-	degToRad,
-	subtractVectors,
-	normalize,
-	cross,
-	getVectorNormal,
-};
+
+export {m4, isPowerOf2, radToDeg, degToRad, subtractVectors, normalize, cross, getVectorNormal}
