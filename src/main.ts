@@ -3,7 +3,6 @@ import WebGlLocation from "./utils/webgl/_location";
 import WebGlManager from "./utils/webgl/_manager";
 import WebGlRenderer from "./utils/webgl/_renderer";
 
-
 function main() {
     const webGlManager = new WebGlManager();
     const webGlLocation = new WebGlLocation(webGlManager);
@@ -11,7 +10,7 @@ function main() {
     const modelFactory = new ModelFactory(webGlManager, webGlLocation);
     const defaultModel = modelFactory.default();
     const webGlRenderer = new WebGlRenderer(webGlManager);
-
+    
     var img = new Image();
     img.src = "creeper.jpg";
     img.onload = () => {

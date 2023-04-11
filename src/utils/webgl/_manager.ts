@@ -37,7 +37,35 @@ export default class WebGlManager {
 		}
 
 		this.program = program;
+		this.setUniformVariable(program, "u_resolution", this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.useProgram(program);
+	}
+
+	setUniformVariable(
+		program: WebGLProgram,
+		uniformName: string,
+		...uniformData: number[]
+	) {
+		// Get the location of the uniform.
+		const uniformLocation = this.gl.getUniformLocation(program, uniformName);
+
+		// Set the uniform based on length of the data.
+		switch (uniformData.length) {
+		  case 1:
+			this.gl.uniform1f(uniformLocation, uniformData[0]);
+			break;
+		  case 2:
+			this.gl.uniform2f(uniformLocation, uniformData[0], uniformData[1]);
+			break;
+		  case 3:
+			this.gl.uniform3f(uniformLocation, uniformData[0], uniformData[1], uniformData[2]);
+			break;
+		  case 4:
+			this.gl.uniform4f(uniformLocation, uniformData[0], uniformData[1], uniformData[2], uniformData[3]);
+			break;
+		  default:
+			throw "Invalid uniform data length.";
+		}
 	}
 
 	shader(type: number, source: string): WebGLShader {

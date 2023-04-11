@@ -70,7 +70,7 @@ function getVectorNormal(vpos) {
 		const vec1 = subtractVectors(p2, p1);
 		const vec2 = subtractVectors(p3, p1);
 		const normalDirection = cross(vec1, vec2);
-		const vecNormal = normalize(normalDirection);
+		const vecNormal = normalize(normalDirection); // -1 0 1
 		for (let j = 0; j < 4; j++) {
 			vNormals = vNormals.concat(vecNormal);
 		}

@@ -22,6 +22,12 @@ export default class Model {
 	scale: [number, number, number] = [1, 1, 1];
 	cameraAngle = degToRad(0);
 	cameraRadius = 500;
+	
+	mouse: [number, number] = [0,0];
+	mouseRot: [number, number] = [0,0];
+	mouseDown: boolean = false;
+
+	children = [];
 
 	constructor(manager: WebGlManager, location: WebGlLocation, shape: Shape) {
 		this.location = location;
@@ -33,17 +39,41 @@ export default class Model {
 		this.positionBuffer = this.gl.createBuffer()!;
 		this.normalBuffer = this.gl.createBuffer()!;
 		this.textureBuffer = this.gl.createBuffer()!;
+
+		this.initMouse();
 	}
 
-	// TODO
+	initMouse() {
+		document.getElementById("canvas")!.addEventListener("mousemove", (e: MouseEvent) => {
+			if (this.mouseDown) {
+				var mouseDelta = [(+e.clientX - this.mouse[0]) * 0.3, (+e.clientY - this.mouse[1]) * 0.3];
+
+				this.rotation[0] += degToRad(mouseDelta[1]);
+				this.rotation[1] += degToRad(mouseDelta[0]);
+
+				this.mouse = [e.clientX, e.clientY];
+			}
+		})
+
+		document.getElementById("canvas")!.addEventListener("mousedown", (e: MouseEvent) => {
+			this.mouseDown = true;
+			this.mouse = [e.clientX, e.clientY];
+		})
+
+		document.getElementById("canvas")!.addEventListener("mouseup", () => {
+			this.mouseDown = false;
+		})
+	}
+
 	attachUI() {
 		// translation
+		let xControl = document.getElementById("translate-x") as HTMLInputElement;
+		let yControl = document.getElementById("translate-y") as HTMLInputElement;
+		let zControl = document.getElementById("translate-z") as HTMLInputElement;
 
-		// rotation
-		let rotYcontrol = document.getElementById(
-			"rotate-y"
-		) as HTMLInputElement;
-		this.rotation[1] = degToRad(+rotYcontrol.value);
+		this.translation[0] = +xControl.value;
+		this.translation[1] = +yControl.value;
+		this.translation[2] = +zControl.value;
 
 		// camera
 		let cRcontrol = document.getElementById(
@@ -115,7 +145,6 @@ export default class Model {
 				this.gl.LINEAR
 			);
 		}
-
 	}
 
 	buffers() {
@@ -203,6 +232,8 @@ export default class Model {
 
 		// TODO: rotation and translation object here
 		var worldMatrix = m4.yRotation(this.rotation[1]);
+		worldMatrix = m4.xRotate(worldMatrix, this.rotation[0]);
+		worldMatrix = m4.translate(worldMatrix, this.translation[0], this.translation[1], this.translation[2]);
 
 		// Multiply the matrices.
 		var worldViewProjectionMatrix = m4.multiply(
@@ -228,14 +259,6 @@ export default class Model {
 
 		// set shading
 		this.gl.uniform1i(this.location.shading, Number(shading));
-	}
-
-	textureImage() {
-		var image = new Image();
-		image.src = "./creeper.jpg";
-		image.onload = () => {
-			this.texture = image;
-		}
 	}
 
 	setGeometry() {
@@ -269,58 +292,7 @@ export default class Model {
 	setTexture() {
 		this.gl.bufferData(
 			this.gl.ARRAY_BUFFER,
-			new Float32Array([
-				// left column front
-				0.22, 0.19, 0.22, 0.79, 0.34, 0.19, 0.22, 0.79, 0.34, 0.79,
-				0.34, 0.19,
-
-				// top rung front
-				0.34, 0.19, 0.34, 0.31, 0.62, 0.19, 0.34, 0.31, 0.62, 0.31,
-				0.62, 0.19,
-
-				// middle rung front
-				0.34, 0.43, 0.34, 0.55, 0.49, 0.43, 0.34, 0.55, 0.49, 0.55,
-				0.49, 0.43,
-
-				// left column back
-				0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
-
-				// top rung back
-				0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
-
-				// middle rung back
-				0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1,
-
-				// top
-				0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1,
-
-				// top rung right
-				0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1,
-
-				// under top rung
-				0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0,
-
-				// between top rung and middle
-				0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1,
-
-				// top of middle rung
-				0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1,
-
-				// right of middle rung
-				0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1,
-
-				// bottom of middle rung.
-				0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0,
-
-				// right of bottom
-				0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1,
-
-				// bottom
-				0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0,
-
-				// left side
-				0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0,
-			]),
+			new Float32Array(this.shape.textureCoord),
 			this.gl.STATIC_DRAW
 		);
 	}
@@ -348,7 +320,7 @@ export default class Model {
 		// draw
 		var primitiveType = this.gl.TRIANGLES;
 		var offset = 0;
-		var count = 16 * 6;
+		var count = this.shape.num_vertices;
 		this.gl.drawArrays(primitiveType, offset, count);
 	}
 }

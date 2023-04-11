@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div id="app">
-			<canvas id="canvas" width="800" height="800"></canvas>
+			<canvas id="canvas" style="border: 1px solid black;" width="600" height="600"></canvas>
 		</div>
 
 		<div>
@@ -18,10 +18,10 @@
 					class="form-range"
 					type="range"
 					id="translate-x"
-					min="-5"
-					max="5"
+					min="-200"
+					max="200"
 					value="0"
-					step="0.000001"
+					step="1"
 				/>
 			</div>
 			<div class="translate-y">
@@ -30,10 +30,10 @@
 					class="form-range"
 					type="range"
 					id="translate-y"
-					min="-5"
-					max="5"
+					min="-200"
+					max="200"
 					value="0"
-					step="0.000001"
+					step="1"
 				/>
 			</div>
 			<div class="translate-z">
@@ -42,13 +42,14 @@
 					class="form-range"
 					type="range"
 					id="translate-z"
-					min="-20"
-					max="0"
+					min="-200"
+					max="200"
 					value="-10"
-					step="0.000001"
+					step="1"
 				/>
 			</div>
-			<div class="rotate-x">
+
+			<!-- <div class="rotate-x">
 				<label for="rotate-x">Rotate x</label>
 				<input
 					class="form-range"
@@ -83,7 +84,7 @@
 					value="0"
 					step="0.01"
 				/>
-			</div>
+			</div> -->
 
 			<div class="scale-x">
 				<label for="scale-x">Scale x</label>
