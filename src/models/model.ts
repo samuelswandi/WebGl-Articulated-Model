@@ -43,6 +43,7 @@ export default class Model {
 		this.initMouse();
 	}
 
+	// rotation
 	initMouse() {
 		document.getElementById("canvas")!.addEventListener("mousemove", (e: MouseEvent) => {
 			if (this.mouseDown) {
@@ -74,6 +75,15 @@ export default class Model {
 		this.translation[0] = +xControl.value;
 		this.translation[1] = +yControl.value;
 		this.translation[2] = +zControl.value;
+
+		// scaling
+		let xScale = document.getElementById("scale-x") as HTMLInputElement;
+		let yScale = document.getElementById("scale-y") as HTMLInputElement;
+		let zScale = document.getElementById("scale-z") as HTMLInputElement;
+
+		this.scale[0] = +xScale.value;
+		this.scale[1] = +yScale.value;
+		this.scale[2] = +zScale.value;
 
 		// camera
 		let cRcontrol = document.getElementById(
@@ -234,6 +244,7 @@ export default class Model {
 		var worldMatrix = m4.yRotation(this.rotation[1]);
 		worldMatrix = m4.xRotate(worldMatrix, this.rotation[0]);
 		worldMatrix = m4.translate(worldMatrix, this.translation[0], this.translation[1], this.translation[2]);
+		worldMatrix = m4.scale(worldMatrix, this.scale[0], this.scale[1], this.scale[2]);
 
 		// Multiply the matrices.
 		var worldViewProjectionMatrix = m4.multiply(
