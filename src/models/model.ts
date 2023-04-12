@@ -4,18 +4,18 @@ import WebGlManager from "../utils/webgl/_manager";
 import Shape from "./shape";
 
 export default class Model {
-	gl: WebGLRenderingContext;
-	program: WebGLProgram;
-	location: WebGlLocation;
+	gl?: WebGLRenderingContext;
+	program?: WebGLProgram;
+	location?: WebGlLocation;
 
 	// shape for vertices etc
 	shape: Shape;
-	texture: HTMLImageElement = new Image();
+	texture?: HTMLImageElement = new Image();
 
 	// buffer
-	positionBuffer: WebGLBuffer;
-	normalBuffer: WebGLBuffer;
-	textureBuffer: WebGLBuffer;
+	positionBuffer?: WebGLBuffer;
+	normalBuffer?: WebGLBuffer;
+	textureBuffer?: WebGLBuffer;
 
 	translation: [number, number, number] = [0, 0, 0];
 	rotation: [number, number, number] = [0, 0, 0];
@@ -23,9 +23,9 @@ export default class Model {
 	cameraAngle = degToRad(0);
 	cameraRadius = 500;
 	
-	mouse: [number, number] = [0,0];
-	mouseRot: [number, number] = [0,0];
-	mouseDown: boolean = false;
+	mouse?: [number, number] = [0,0];
+	mouseRot?: [number, number] = [0,0];
+	mouseDown?: boolean = false;
 
 	children = [];
 
@@ -46,7 +46,7 @@ export default class Model {
 	initMouse() {
 		document.getElementById("canvas")!.addEventListener("mousemove", (e: MouseEvent) => {
 			if (this.mouseDown) {
-				var mouseDelta = [(+e.clientX - this.mouse[0]) * 0.3, (+e.clientY - this.mouse[1]) * 0.3];
+				var mouseDelta = [(+e.clientX - this.mouse![0]) * 0.3, (+e.clientY - this.mouse![1]) * 0.3];
 
 				this.rotation[0] += degToRad(mouseDelta[1]);
 				this.rotation[1] += degToRad(mouseDelta[0]);
@@ -88,77 +88,77 @@ export default class Model {
 	}
 
 	bind() {
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.positionBuffer!);
 		this.setGeometry();
 
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
+		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.normalBuffer!);
 		this.setNormals();
 
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.textureBuffer!);
 		this.setTexture();
 
-		var texture = this.gl.createTexture();
-		this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+		var texture = this.gl!.createTexture();
+		this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
 
-		this.gl.texImage2D(
-			this.gl.TEXTURE_2D,
+		this.gl!.texImage2D(
+			this.gl!.TEXTURE_2D,
 			0,
-			this.gl.RGBA,
+			this.gl!.RGBA,
 			1,
 			1,
 			0,
-			this.gl.RGBA,
-			this.gl.UNSIGNED_BYTE,
+			this.gl!.RGBA,
+			this.gl!.UNSIGNED_BYTE,
 			new Uint8Array([0, 0, 255, 255])
 		);
 
 		// Now that the image has loaded make copy it to the texture.
-		this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-		this.gl.texImage2D(
-			this.gl.TEXTURE_2D,
+		this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
+		this.gl!.texImage2D(
+			this.gl!.TEXTURE_2D,
 			0,
-			this.gl.RGBA,
-			this.gl.RGBA,
-			this.gl.UNSIGNED_BYTE,
-			this.texture
+			this.gl!.RGBA,
+			this.gl!.RGBA,
+			this.gl!.UNSIGNED_BYTE,
+			this.texture!
 		);
 
 		// Check if the image is a power of 2 in both dimensions.
-		if (isPowerOf2(this.texture.width) && isPowerOf2(this.texture.height)) {
+		if (isPowerOf2(this.texture!.width) && isPowerOf2(this.texture!.height)) {
 			// Yes, it's a power of 2. Generate mips.
-			this.gl.generateMipmap(this.gl.TEXTURE_2D);
+			this.gl!.generateMipmap(this.gl!.TEXTURE_2D);
 		} else {
 			// No, it's not a power of 2. Turn of mips and set wrapping to clamp to edge
-			this.gl.texParameteri(
-				this.gl.TEXTURE_2D,
-				this.gl.TEXTURE_WRAP_S,
-				this.gl.CLAMP_TO_EDGE
+			this.gl!.texParameteri(
+				this.gl!.TEXTURE_2D,
+				this.gl!.TEXTURE_WRAP_S,
+				this.gl!.CLAMP_TO_EDGE
 			);
-			this.gl.texParameteri(
-				this.gl.TEXTURE_2D,
-				this.gl.TEXTURE_WRAP_T,
-				this.gl.CLAMP_TO_EDGE
+			this.gl!.texParameteri(
+				this.gl!.TEXTURE_2D,
+				this.gl!.TEXTURE_WRAP_T,
+				this.gl!.CLAMP_TO_EDGE
 			);
-			this.gl.texParameteri(
-				this.gl.TEXTURE_2D,
-				this.gl.TEXTURE_MIN_FILTER,
-				this.gl.LINEAR
+			this.gl!.texParameteri(
+				this.gl!.TEXTURE_2D,
+				this.gl!.TEXTURE_MIN_FILTER,
+				this.gl!.LINEAR
 			);
 		}
 	}
 
 	buffers() {
-		this.gl.enableVertexAttribArray(this.location.position);
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+		this.gl!.enableVertexAttribArray(this.location!.position);
+		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.positionBuffer!);
 
 		// Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
 		var size = 3; // 3 components per iteration
-		var type = this.gl.FLOAT; // the data is 32bit floats
+		var type = this.gl!.FLOAT; // the data is 32bit floats
 		var normalize = false; // don't normalize the data
 		var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
 		var offset = 0; // start at the beginning of the buffer
-		this.gl.vertexAttribPointer(
-			this.location.position,
+		this.gl!.vertexAttribPointer(
+			this.location!.position,
 			size,
 			type,
 			normalize,
@@ -166,17 +166,17 @@ export default class Model {
 			offset
 		);
 
-		this.gl.enableVertexAttribArray(this.location.normal);
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuffer);
+		this.gl!.enableVertexAttribArray(this.location!.normal);
+		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.normalBuffer!);
 
 		// Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
 		var size = 3; // 3 components per iteration
-		var type = this.gl.FLOAT; // the data is 32bit floats
+		var type = this.gl!.FLOAT; // the data is 32bit floats
 		var normalize = false; // don't normalize the data
 		var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
 		var offset = 0; // start at the beginning of the buffer
-		this.gl.vertexAttribPointer(
-			this.location.normal,
+		this.gl!.vertexAttribPointer(
+			this.location!.normal,
 			size,
 			type,
 			normalize,
@@ -185,19 +185,19 @@ export default class Model {
 		);
 
 		// Turn on the texcoord attribute
-		this.gl.enableVertexAttribArray(this.location.texture);
+		this.gl!.enableVertexAttribArray(this.location!.texture);
 
 		// bind the texcoord buffer.
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.textureBuffer!);
 
 		// Tell the texcoord attribute how to get data out of texcoordBuffer (ARRAY_BUFFER)
 		var size = 2; // 2 components per iteration
-		var type = this.gl.FLOAT; // the data is 32bit floats
+		var type = this.gl!.FLOAT; // the data is 32bit floats
 		var normalize = false; // don't normalize the data
 		var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
 		var offset = 0; // start at the beginning of the buffer
-		this.gl.vertexAttribPointer(
-			this.location.texture,
+		this.gl!.vertexAttribPointer(
+			this.location!.texture,
 			size,
 			type,
 			normalize,
@@ -241,24 +241,24 @@ export default class Model {
 			worldMatrix
 		);
 
-		this.gl.uniformMatrix4fv(
-			this.location.worldView,
+		this.gl!.uniformMatrix4fv(
+			this.location!.worldView,
 			false,
 			worldViewProjectionMatrix
 		);
-		this.gl.uniformMatrix4fv(this.location.world, false, worldMatrix);
+		this.gl!.uniformMatrix4fv(this.location!.world, false, worldMatrix);
 
 		// Set the color to use
-		this.gl.uniform4fv(this.location.color, [0.2, 1, 0.2, 1]); // green
+		this.gl!.uniform4fv(this.location!.color, [0.2, 1, 0.2, 1]); // green
 
 		// set the light direction.
-		this.gl.uniform3fv(this.location.light, normalize([0.5, 0.7, 1]));
+		this.gl!.uniform3fv(this.location!.light, normalize([0.5, 0.7, 1]));
 
 		// Tell the shader to use texture unit 0 for u_texture
-		this.gl.uniform1i(this.location.textureU, 0);
+		this.gl!.uniform1i(this.location!.textureU, 0);
 
 		// set shading
-		this.gl.uniform1i(this.location.shading, Number(shading));
+		this.gl!.uniform1i(this.location!.shading, Number(shading));
 	}
 
 	setGeometry() {
@@ -277,40 +277,40 @@ export default class Model {
 			positions[ii + 2] = vector[2];
 		}
 
-		this.gl.bufferData(
-			this.gl.ARRAY_BUFFER,
+		this.gl!.bufferData(
+			this.gl!.ARRAY_BUFFER,
 			positions,
-			this.gl.STATIC_DRAW
+			this.gl!.STATIC_DRAW
 		);
 	}
 
 	setNormals() {
 		var normals = new Float32Array(this.shape.normals);
-		this.gl.bufferData(this.gl.ARRAY_BUFFER, normals, this.gl.STATIC_DRAW);
+		this.gl!.bufferData(this.gl!.ARRAY_BUFFER, normals, this.gl!.STATIC_DRAW);
 	}
 
 	setTexture() {
-		this.gl.bufferData(
-			this.gl.ARRAY_BUFFER,
+		this.gl!.bufferData(
+			this.gl!.ARRAY_BUFFER,
 			new Float32Array(this.shape.textureCoord),
-			this.gl.STATIC_DRAW
+			this.gl!.STATIC_DRAW
 		);
 	}
 
 	draw(projectionMatrix: number[], shading: boolean) {
 		// Tell WebGL how to convert from clip space to pixels
-		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+		this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
 
 		// Clear the canvas
-		this.gl.clearColor(0.0, 0.0, 0.0, 0.0);
-		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+		this.gl!.clearColor(0.0, 0.0, 0.0, 0.0);
+		this.gl!.clear(this.gl!.COLOR_BUFFER_BIT);
 
 		// Turn on culling. By default backfacing triangles
 		// will be culled.
-		this.gl.enable(this.gl.CULL_FACE);
+		this.gl!.enable(this.gl!.CULL_FACE);
 
 		// Enable the depth buffer
-		this.gl.enable(this.gl.DEPTH_TEST);
+		this.gl!.enable(this.gl!.DEPTH_TEST);
 
 		this.attachUI();
 		this.bind();
@@ -318,9 +318,9 @@ export default class Model {
 		this.uniforms(projectionMatrix, shading);
 
 		// draw
-		var primitiveType = this.gl.TRIANGLES;
+		var primitiveType = this.gl!.TRIANGLES;
 		var offset = 0;
 		var count = this.shape.num_vertices;
-		this.gl.drawArrays(primitiveType, offset, count);
+		this.gl!.drawArrays(primitiveType, offset, count);
 	}
 }
