@@ -9,13 +9,14 @@ function main() {
 
     const modelFactory = new ModelFactory(webGlManager, webGlLocation);
     const defaultModel = modelFactory.default();
+    const cubeModel = modelFactory.cube();
     const webGlRenderer = new WebGlRenderer(webGlManager);
     
     var img = new Image();
     img.src = "creeper.jpg";
     img.onload = () => {
-        defaultModel.texture = img;
-        webGlRenderer.setModel(defaultModel);
+        // defaultModel.texture = img;
+        webGlRenderer.setModel(cubeModel);
         webGlRenderer.render();
         requestAnimationFrame(render);
     }

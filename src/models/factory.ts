@@ -14,6 +14,11 @@ export default class ModelFactory {
 	}
 
 	default(): Model {
+		var model = new Model(this.manager, this.location, Default);
+		return model;
+	}
+
+	cube(): Model {
 		var model = new Model(this.manager, this.location, Cube);
 		return model;
 	}

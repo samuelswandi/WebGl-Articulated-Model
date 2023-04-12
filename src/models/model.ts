@@ -260,7 +260,7 @@ export default class Model {
 		this.gl!.uniformMatrix4fv(this.location!.world, false, worldMatrix);
 
 		// Set the color to use
-		this.gl!.uniform4fv(this.location!.color, [0.2, 1, 0.2, 1]); // green
+		this.gl!.uniform4fv(this.location!.color, [1, 1, 1, 1]); // green
 
 		// set the light direction.
 		this.gl!.uniform3fv(this.location!.light, normalize([0.5, 0.7, 1]));
