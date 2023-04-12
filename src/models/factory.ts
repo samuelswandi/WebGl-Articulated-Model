@@ -4,7 +4,6 @@ import Model from "./model";
 import { Default } from "../test/default";
 import { Cube } from "../test/cube";
 import { Man } from "../test/man";
-import Shape from "./shape";
 
 export default class ModelFactory {
 	manager: WebGlManager;

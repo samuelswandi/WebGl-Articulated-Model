@@ -151,11 +151,33 @@
 					id="camera-radius"
 					min="0"
 					max="1000"
-					value="500"
+					value="600"
 					step="1"
 				/>
 			</div>
+			<div class="animation-columns">
+				<div>
+				  <div class="horizontal-box justify-center">
+					<button id="play-button">Play</button>
+					<button id="pause-button">Pause</button>
+				  </div>
+		
+				<div class="horizontal-box justify-start">
+					<div>You are now at frame</div>
+					<div class="horizontal-box half-width">
+					  <button id="first-frame">&lt;&lt;</button>
+					  <button id="prev-frame">&lt;</button>
+					  <p id="cur-frame-id">0</p>
+					  <button id="next-frame">&gt;</button>
+					  <button id="last-frame">&gt;&gt;</button>
+					</div>
+					<div id="total-frame">Out of x frames</div>
+				</div>
+			</div>
+				
+			  </div>
 		</div>
+
 	</body>
 	<script type="module" src="/src/main.ts"></script>
 </html>

@@ -245,6 +245,8 @@ export default class Model {
 
 		var worldMatrix = m4.yRotation(this.rotation[1]);
 		worldMatrix = m4.xRotate(worldMatrix, this.rotation[0]);
+		worldMatrix = m4.zRotate(worldMatrix, this.rotation[2]);
+
 		worldMatrix = m4.translate(
 			worldMatrix, 
 			this.translation[0] + this.deltaTranslation![0], 
@@ -334,6 +336,7 @@ export default class Model {
 
 		// draw children
 		this.children.forEach((child) => {
+			child.texture = this.texture;  // TODO : Gotta edit this if want to change specific single texture
 			child._recursiveDraw!(projectionMatrix, shading);
 		});
 	}
