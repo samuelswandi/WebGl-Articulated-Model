@@ -8,6 +8,7 @@ export default class Model {
 	program?: WebGLProgram;
 	location?: WebGlLocation;
 
+	name: string = "Model";
 	// shape for vertices etc
 	shape: Shape;
 	texture?: HTMLImageElement = new Image();
@@ -17,17 +18,24 @@ export default class Model {
 	normalBuffer?: WebGLBuffer;
 	textureBuffer?: WebGLBuffer;
 
+	// initial transformation
 	translation: [number, number, number] = [0, 0, 0];
-	rotation: [number, number, number] = [0, 0, 0];
 	scale: [number, number, number] = [1, 1, 1];
-	cameraAngle = degToRad(0);
-	cameraRadius = 500;
+	rotation: [number, number, number] = [0, 0, 0];
 	
+	// UI movement
+	deltaTranslation?: [number, number, number] = [0, 0, 0];
+	deltaScale?: [number, number, number] = [1, 1, 1];
+	cameraAngle? = degToRad(0);
+	cameraRadius? = 500;
+	
+	// mouse rot
 	mouse?: [number, number] = [0,0];
 	mouseRot?: [number, number] = [0,0];
 	mouseDown?: boolean = false;
 
-	children = [];
+	// Child models
+	children: Model[] = [];
 
 	constructor(manager: WebGlManager, location: WebGlLocation, shape: Shape) {
 		this.location = location;
@@ -40,11 +48,11 @@ export default class Model {
 		this.normalBuffer = this.gl.createBuffer()!;
 		this.textureBuffer = this.gl.createBuffer()!;
 
-		this.initMouse();
+		this.initMouse!();
 	}
 
 	// rotation
-	initMouse() {
+	initMouse?() {
 		document.getElementById("canvas")!.addEventListener("mousemove", (e: MouseEvent) => {
 			if (this.mouseDown) {
 				var mouseDelta = [(+e.clientX - this.mouse![0]) * 0.3, (+e.clientY - this.mouse![1]) * 0.3];
@@ -66,24 +74,19 @@ export default class Model {
 		})
 	}
 
-	attachUI() {
-		// translation
-		let xControl = document.getElementById("translate-x") as HTMLInputElement;
-		let yControl = document.getElementById("translate-y") as HTMLInputElement;
-		let zControl = document.getElementById("translate-z") as HTMLInputElement;
+	attachUI?() {
+		// UI translation & scale
+		var xControl = document.getElementById("translate-x") as HTMLInputElement;
+		var yControl = document.getElementById("translate-y") as HTMLInputElement;
+		var zControl = document.getElementById("translate-z") as HTMLInputElement;
 
-		this.translation[0] = +xControl.value;
-		this.translation[1] = +yControl.value;
-		this.translation[2] = +zControl.value;
+		this.deltaTranslation = [+xControl.value, +yControl.value, +zControl.value];
 
-		// scaling
-		let xScale = document.getElementById("scale-x") as HTMLInputElement;
-		let yScale = document.getElementById("scale-y") as HTMLInputElement;
-		let zScale = document.getElementById("scale-z") as HTMLInputElement;
+		var xScale = document.getElementById("scale-x") as HTMLInputElement;
+		var yScale = document.getElementById("scale-y") as HTMLInputElement;
+		var zScale = document.getElementById("scale-z") as HTMLInputElement;
 
-		this.scale[0] = +xScale.value;
-		this.scale[1] = +yScale.value;
-		this.scale[2] = +zScale.value;
+		this.deltaScale = [+xScale.value, +yScale.value, +zScale.value];
 
 		// camera
 		let cRcontrol = document.getElementById(
@@ -97,15 +100,15 @@ export default class Model {
 		this.cameraRadius = +cRcontrol.value;
 	}
 
-	bind() {
+	bind?() {
 		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.positionBuffer!);
-		this.setGeometry();
+		this.setGeometry!();
 
 		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.normalBuffer!);
-		this.setNormals();
+		this.setNormals!();
 
 		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.textureBuffer!);
-		this.setTexture();
+		this.setTexture!();
 
 		var texture = this.gl!.createTexture();
 		this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
@@ -157,7 +160,7 @@ export default class Model {
 		}
 	}
 
-	buffers() {
+	buffers?() {
 		this.gl!.enableVertexAttribArray(this.location!.position);
 		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.positionBuffer!);
 
@@ -216,7 +219,7 @@ export default class Model {
 		);
 	}
 
-	uniforms(projectionMatrix: number[], shading: boolean) {
+	uniforms?(projectionMatrix: number[], shading: boolean) {
 		// Use matrix math to compute a position on a circle where the camera is
 		let cameraMatrix = m4.identity();
 		cameraMatrix = m4.yRotate(cameraMatrix, this.cameraAngle);
@@ -240,11 +243,20 @@ export default class Model {
 		// Compute a view projection matrix
 		var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
-		// TODO: rotation and translation object here
 		var worldMatrix = m4.yRotation(this.rotation[1]);
 		worldMatrix = m4.xRotate(worldMatrix, this.rotation[0]);
-		worldMatrix = m4.translate(worldMatrix, this.translation[0], this.translation[1], this.translation[2]);
-		worldMatrix = m4.scale(worldMatrix, this.scale[0], this.scale[1], this.scale[2]);
+		worldMatrix = m4.translate(
+			worldMatrix, 
+			this.translation[0] + this.deltaTranslation![0], 
+			this.translation[1] + this.deltaTranslation![1], 
+			this.translation[2] + this.deltaTranslation![2]
+		);
+		worldMatrix = m4.scale(
+			worldMatrix, 
+			this.scale[0] * this.deltaScale![0], 
+			this.scale[1] * this.deltaScale![1], 
+			this.scale[2] * this.deltaScale![2]
+		);
 
 		// Multiply the matrices.
 		var worldViewProjectionMatrix = m4.multiply(
@@ -272,7 +284,7 @@ export default class Model {
 		this.gl!.uniform1i(this.location!.shading, Number(shading));
 	}
 
-	setGeometry() {
+	setGeometry?() {
 		var positions = new Float32Array(this.shape.positions);
 		var matrix = m4.xRotation(Math.PI);
 		matrix = m4.translate(matrix, -50, -50, -15);
@@ -295,12 +307,12 @@ export default class Model {
 		);
 	}
 
-	setNormals() {
+	setNormals?() {
 		var normals = new Float32Array(this.shape.normals);
 		this.gl!.bufferData(this.gl!.ARRAY_BUFFER, normals, this.gl!.STATIC_DRAW);
 	}
 
-	setTexture() {
+	setTexture?() {
 		this.gl!.bufferData(
 			this.gl!.ARRAY_BUFFER,
 			new Float32Array(this.shape.textureCoord),
@@ -308,7 +320,25 @@ export default class Model {
 		);
 	}
 
-	draw(projectionMatrix: number[], shading: boolean) {
+	_recursiveDraw?(projectionMatrix: number[], shading: boolean) {
+		this.attachUI!();
+		this.bind!();
+		this.buffers!();
+		this.uniforms!(projectionMatrix, shading);
+		
+		// draw
+		var primitiveType = this.gl!.TRIANGLES;
+		var offset = 0;
+		var count = this.shape.num_vertices;
+		this.gl!.drawArrays(primitiveType, offset, count);
+
+		// draw children
+		this.children.forEach((child) => {
+			child._recursiveDraw!(projectionMatrix, shading);
+		});
+	}
+
+	draw?(projectionMatrix: number[], shading: boolean) {
 		// Tell WebGL how to convert from clip space to pixels
 		this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
 
@@ -322,16 +352,7 @@ export default class Model {
 
 		// Enable the depth buffer
 		this.gl!.enable(this.gl!.DEPTH_TEST);
-
-		this.attachUI();
-		this.bind();
-		this.buffers();
-		this.uniforms(projectionMatrix, shading);
-
-		// draw
-		var primitiveType = this.gl!.TRIANGLES;
-		var offset = 0;
-		var count = this.shape.num_vertices;
-		this.gl!.drawArrays(primitiveType, offset, count);
+		
+		this._recursiveDraw!(projectionMatrix, shading);
 	}
 }

@@ -75,6 +75,6 @@ export default class WebGlRenderer {
 	
 	render() {
 		this.attachUI();
-		this.model!.draw(this.projectionMatrix, this.shading);
+		this.model!.draw!(this.projectionMatrix, this.shading);
 	}
 }

@@ -1,7 +1,7 @@
 import Shape from "../models/shape"
 
 export const Cube: Shape = {
-    "num_vertices": 48,
+    "num_vertices": 36,
     "positions": [
         // bawah
         -70, -70, -70,
