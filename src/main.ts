@@ -76,8 +76,10 @@ async function main() {
     // }
 
     let isPlaying = false;
+    let isReversePlaying = false;
     const speed = 0.2;
     const playButton = document.getElementById("play-button") as HTMLButtonElement;
+    const reverseButton = document.getElementById("reverse-play-button") as HTMLButtonElement;
     const pauseButton = document.getElementById("pause-button") as HTMLButtonElement;
     const resetButton = document.getElementById("reset-button") as HTMLButtonElement;
 
