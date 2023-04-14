@@ -4,7 +4,8 @@ import Model from "./model";
 import { Default } from "../test/default";
 import { Cube } from "../test/cube";
 import { Man } from "../test/man";
-
+import { ManAnimation } from "../test/animation/man_animation";
+import { Transformation } from "./transformation";
 export default class ModelFactory {
 	manager: WebGlManager;
 	location: WebGlLocation;
@@ -45,5 +46,33 @@ export default class ModelFactory {
 			res.children.push(this._recursiveObjectFactory(manager, loc, model.children[i]));
 		}
 		return res;
+	}
+
+	_recursiveTransformationFactory
+	(
+		trs : Transformation[],
+		idx : number,
+		model : Model,
+	) : Model
+	{
+		model.translation[0] += trs[idx].translation[0];
+		model.translation[1] += trs[idx].translation[1];
+		model.translation[2] += trs[idx].translation[2];
+
+		model.rotation[0] += trs[idx].rotation[0];
+		model.rotation[1] += trs[idx].rotation[1];
+		model.rotation[2] += trs[idx].rotation[2];
+
+		model.scale[0] *= trs[idx].scale[0];
+		model.scale[1] *= trs[idx].scale[1];
+		model.scale[2] *= trs[idx].scale[2];
+
+		// children
+		for (let i = 0 ; i < model.children.length ; i++){
+			idx++;
+			model.children[i] = this._recursiveTransformationFactory(trs, idx, model.children[i]);
+		}
+
+		return model;
 	}
 }
