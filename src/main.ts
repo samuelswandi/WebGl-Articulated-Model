@@ -47,7 +47,7 @@ async function main() {
     firstFrame.onclick = () => {
         if (frameIdx > 0) {
             model = modelFactory._recursiveTransformationFactory(
-                backwardSum(anim, frameIdx), 0, Man);
+                backwardSum(anim, 0, frameIdx), 0, Man);
             frameIdx = 0;
             frameText.textContent = (frameIdx + 1).toString();
         }
@@ -64,14 +64,25 @@ async function main() {
 
     let isPlaying = false;
     let isPlayingReverse = false;
-    const speed = 0.2;
+    let isPlayingLoop = false;
+
+    let speed = 0.2;
+    const speedButton = document.getElementById("frame-rate") as HTMLInputElement;
+    const speedText = document.getElementById("frame-rate-text") as HTMLTextAreaElement;
+    
     const playButton = document.getElementById("play-button") as HTMLButtonElement;
     const reversePlayButton = document.getElementById("reverse-play-button") as HTMLButtonElement;
     const pauseButton = document.getElementById("pause-button") as HTMLButtonElement;
+    const loopPlayButton = document.getElementById("loop-play-button") as HTMLButtonElement;
+
+    let startFrame = 0;
+    let endFrame = 0;
+    const startFrameInput = document.getElementById("start-frame") as HTMLInputElement;
+    const endFrameInput = document.getElementById("end-frame") as HTMLInputElement;
 
     const disableWhilePlaying = () => {
         playButton.disabled = true;
-        reversePlayButton.disabled = true;
+        reversePlayButton.disabled = true;        
         pauseButton.disabled = false;
         firstFrame.disabled = true;
         nextFrame.disabled = true;
@@ -88,26 +99,60 @@ async function main() {
         prevFrame.disabled = false;
         lastFrame.disabled = false;
     }
+
+    speedButton.oninput = () => {
+        speedText.textContent = speedButton.value;
+        speed = parseFloat(speedButton.value);
+    }
     
     playButton.onclick = () => {
         isPlaying = true;
         isPlayingReverse = false;
+        isPlayingLoop = false;
     }
 
     reversePlayButton.onclick = () => {
         isPlaying = false;
         isPlayingReverse = true;
+        isPlayingLoop = false;
+    }
+
+    loopPlayButton.onclick = () => {
+        if (startFrameInput.value == "" || endFrameInput.value == ""){
+            alert("Please fill start and end frame");
+            return;
+        }
+
+        if (parseInt(startFrameInput.value) < 1 || parseInt(endFrameInput.value) > anim.length){
+            alert("Start frame and end frame must be between 1 and " + anim.length);
+            return;
+        }
+
+        if (parseInt(startFrameInput.value) >= parseInt(endFrameInput.value)){
+            alert("Start frame must be smaller than end frame");
+            return;
+        }
+
+        startFrame = parseInt(startFrameInput.value) - 1;
+        endFrame = parseInt(endFrameInput.value) - 1;
+
+        isPlaying = false;
+        isPlayingReverse = false;
+        isPlayingLoop = true;
     }
 
     pauseButton.onclick = () => {
         isPlaying = false;
         isPlayingReverse = false;
+        isPlayingLoop = false;
         enableAfterPlaying();
     }
     
     let globalTimer = 0;
     setInterval(function () {
         globalTimer++;
+
+        // Normal Play
         if(isPlaying){
             if(globalTimer % Math.round(speed * 10) == 0){
                 if (frameIdx < anim.length - 1) {
@@ -123,6 +168,8 @@ async function main() {
             };
         }
 
+
+        // Reverse Play
         if (isPlayingReverse){
             if(globalTimer % Math.round(speed * 10) == 0){
                 if (frameIdx > 0) {
@@ -132,11 +179,26 @@ async function main() {
                     disableWhilePlaying();
                 }
                 else{
-                    isPlaying = false;
+                    isPlayingReverse = false;
                     enableAfterPlaying();
                 }
             };
         } 
+
+
+        // Loop Play
+        if (isPlayingLoop){
+            if(globalTimer % Math.round(speed * 10) == 0){
+                frameIdx = (frameIdx + 1) % (endFrame - startFrame + 1) + startFrame;
+                if (frameIdx == startFrame) {
+                    model = modelFactory._recursiveTransformationFactory(backwardSum(anim, startFrame, endFrame), 0, Man);
+                } else{
+                    model = modelFactory._recursiveTransformationFactory(anim[frameIdx], 0, Man);
+                }
+                frameText.textContent = (frameIdx + 1).toString();
+                disableWhilePlaying();
+            };
+        }
     }, 100);
 
     
