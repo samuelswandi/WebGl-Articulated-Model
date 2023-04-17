@@ -56,7 +56,7 @@ async function main() {
     lastFrame.onclick = () => {
         if (frameIdx < anim.length - 1) {
             model = modelFactory._recursiveTransformationFactory(
-                forwardSum(anim, frameIdx), 0 ,Man);
+                forwardSum(anim, frameIdx, anim.length - 1), 0 ,Man);
             frameIdx = anim.length - 1;
             frameText.textContent = (frameIdx + 1).toString();
         }
@@ -136,6 +136,19 @@ async function main() {
         startFrame = parseInt(startFrameInput.value) - 1;
         endFrame = parseInt(endFrameInput.value) - 1;
 
+        // reset the model to default using backwardSum
+        model = modelFactory._recursiveTransformationFactory(
+            backwardSum(anim, 0, frameIdx), 0, Man
+        );
+
+        // forwardSum to designated start frame
+        model = modelFactory._recursiveTransformationFactory(
+            forwardSum(anim, 0, startFrame), 0 ,Man
+        );
+
+        frameText.textContent = (startFrame + 1).toString();
+        frameIdx = startFrame;
+
         isPlaying = false;
         isPlayingReverse = false;
         isPlayingLoop = true;
@@ -189,7 +202,7 @@ async function main() {
         // Loop Play
         if (isPlayingLoop){
             if(globalTimer % Math.round(speed * 10) == 0){
-                frameIdx = (frameIdx + 1) % (endFrame - startFrame + 1) + startFrame;
+                frameIdx = ((frameIdx - startFrame) + 1) % (endFrame - startFrame + 1) + startFrame;
                 if (frameIdx == startFrame) {
                     model = modelFactory._recursiveTransformationFactory(backwardSum(anim, startFrame, endFrame), 0, Man);
                 } else{

@@ -43,12 +43,12 @@ export function backwardSum(src: Transformation[][],idxStart : number, idxEnd : 
     return sumTr;
 }
 
-export function forwardSum(src: Transformation[][], idx : number) : Transformation[] {
+export function forwardSum(src: Transformation[][], idxStart : number, idxEnd : number) : Transformation[] {
     let sumTr : Transformation[] = [];
     for (let i = 0; i < src[0].length; i++) 
         sumTr.push(new Transformation([0,0,0], [0,0,0], [1,1,1]));
 
-    for (let i = idx + 1; i < src.length; i++) {
+    for (let i = idxStart + 1; i <= idxEnd; i++) {
         for (let j = 0 ; j < sumTr.length; j++) {
             sumTr[j].translation[0] += src[i][j].translation[0];
             sumTr[j].translation[1] += src[i][j].translation[1];
@@ -63,8 +63,6 @@ export function forwardSum(src: Transformation[][], idx : number) : Transformati
             sumTr[j].scale[2] *= src[i][j].scale[2];
         }
     }
-
-    console.log(sumTr)
 
     return sumTr;
 }
