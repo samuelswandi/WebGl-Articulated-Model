@@ -4,7 +4,7 @@ import WebGlManager from "./utils/webgl/_manager";
 import WebGlRenderer from "./utils/webgl/_renderer";
 import { ManAnimation } from "./test/animation/man_animation";
 import { Man } from "./test/man";
-import { Transformation, negate } from "./models/transformation";
+import { Transformation, backwardSum, forwardSum, negate } from "./models/transformation";
 
 async function main() {
     const webGlManager = new WebGlManager();
@@ -23,8 +23,8 @@ async function main() {
     
     let frameIdx = 0;
     const frameText = document.getElementById("cur-frame-id") as HTMLTextAreaElement;
-    // const firstFrame = document.getElementById("first-frame") as HTMLButtonElement;
-    // const lastFrame = document.getElementById("last-frame") as HTMLButtonElement;
+    const firstFrame = document.getElementById("first-frame") as HTMLButtonElement;
+    const lastFrame = document.getElementById("last-frame") as HTMLButtonElement;
     const nextFrame = document.getElementById("next-frame") as HTMLButtonElement;
     const prevFrame = document.getElementById("prev-frame") as HTMLButtonElement;
 
@@ -44,58 +44,65 @@ async function main() {
         }
     }
 
-    // firstFrame.onclick = () => {
-        // if (frameIdx > 0) {
-        //     let sumTr : Transformation[] =  anim[0];
-        //     for (let i = 1; i <= frameIdx; i++) {
-        //         for (let j = 0 ; j < sumTr.length; j++) {
-        //             sumTr[j].translation[0] -= anim[i][j].translation[0];
-        //             sumTr[j].translation[1] -= anim[i][j].translation[1];
-        //             sumTr[j].translation[2] -= anim[i][j].translation[2];
+    firstFrame.onclick = () => {
+        if (frameIdx > 0) {
+            model = modelFactory._recursiveTransformationFactory(
+                backwardSum(anim, frameIdx), 0, Man);
+            frameIdx = 0;
+            frameText.textContent = (frameIdx + 1).toString();
+        }
+    }
 
-        //             sumTr[j].rotation[0] -= anim[i][j].rotation[0];
-        //             sumTr[j].rotation[1] -= anim[i][j].rotation[1];
-        //             sumTr[j].rotation[2] -= anim[i][j].rotation[2];
-
-        //             sumTr[j].scale[0] /= anim[i][j].scale[0];
-        //             sumTr[j].scale[1] /= anim[i][j].scale[1];
-        //             sumTr[j].scale[2] /= anim[i][j].scale[2];
-        //         }
-        //     }
-            
-        //     model = modelFactory._recursiveTransformationFactory(sumTr, 0, Man);
-        //     frameIdx = 0;
-        //     frameText.textContent = (frameIdx + 1).toString();
-        // }
-    // }
-
-    // lastFrame.onclick = () => {
-    //     if (frameIdx < anim.length - 1) {
-
-    //     }
-    // }
+    lastFrame.onclick = () => {
+        if (frameIdx < anim.length - 1) {
+            model = modelFactory._recursiveTransformationFactory(
+                forwardSum(anim, frameIdx), 0 ,Man);
+            frameIdx = anim.length - 1;
+            frameText.textContent = (frameIdx + 1).toString();
+        }
+    }
 
     let isPlaying = false;
-    let isReversePlaying = false;
+    let isPlayingReverse = false;
     const speed = 0.2;
     const playButton = document.getElementById("play-button") as HTMLButtonElement;
-    const reverseButton = document.getElementById("reverse-play-button") as HTMLButtonElement;
+    const reversePlayButton = document.getElementById("reverse-play-button") as HTMLButtonElement;
     const pauseButton = document.getElementById("pause-button") as HTMLButtonElement;
-    const resetButton = document.getElementById("reset-button") as HTMLButtonElement;
 
+    const disableWhilePlaying = () => {
+        playButton.disabled = true;
+        reversePlayButton.disabled = true;
+        pauseButton.disabled = false;
+        firstFrame.disabled = true;
+        nextFrame.disabled = true;
+        prevFrame.disabled = true;
+        lastFrame.disabled = true;
+    }
+
+    const enableAfterPlaying = () => {
+        playButton.disabled = false;
+        reversePlayButton.disabled = false;
+        pauseButton.disabled = true;
+        firstFrame.disabled = false;
+        nextFrame.disabled = false;
+        prevFrame.disabled = false;
+        lastFrame.disabled = false;
+    }
     
     playButton.onclick = () => {
         isPlaying = true;
+        isPlayingReverse = false;
+    }
+
+    reversePlayButton.onclick = () => {
+        isPlaying = false;
+        isPlayingReverse = true;
     }
 
     pauseButton.onclick = () => {
         isPlaying = false;
-    }
-
-    resetButton.onclick = () => {
-        frameIdx = 0;
-        frameText.textContent = (frameIdx + 1).toString();
-        isPlaying = false;
+        isPlayingReverse = false;
+        enableAfterPlaying();
     }
     
     let globalTimer = 0;
@@ -107,12 +114,29 @@ async function main() {
                     frameIdx++;
                     model = modelFactory._recursiveTransformationFactory(anim[frameIdx], 0, Man);
                     frameText.textContent = (frameIdx + 1).toString();
+                    disableWhilePlaying();
                 }
                 else{
                     isPlaying = false;
+                    enableAfterPlaying();
                 }
             };
         }
+
+        if (isPlayingReverse){
+            if(globalTimer % Math.round(speed * 10) == 0){
+                if (frameIdx > 0) {
+                    model = modelFactory._recursiveTransformationFactory(anim[frameIdx].map((transformation) => negate(transformation)), 0, Man);
+                    frameIdx--;
+                    frameText.textContent = (frameIdx + 1).toString();
+                    disableWhilePlaying();
+                }
+                else{
+                    isPlaying = false;
+                    enableAfterPlaying();
+                }
+            };
+        } 
     }, 100);
 
     

@@ -30,14 +30,6 @@ export const ManAnimation : Transformation[][] = [
         { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
         { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
     ],
-    // [
-    //     { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
-    //     { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
-    //     { "translation" : [-30, 190, 0], "rotation" : [0, 0, -1.6], "scale" : [1, 1, 1] },
-    //     { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
-    //     { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
-    //     { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
-    // ],
     // 3
     [
         { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
@@ -110,7 +102,7 @@ export const ManAnimation : Transformation[][] = [
         { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
         { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
     ],
-    // WALKING 11
+    // 11
     [
         { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
         { "translation" : [0, 0, 0], "rotation" : [0, 0, 0], "scale" : [1, 1, 1] },
