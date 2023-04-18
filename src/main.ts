@@ -2,8 +2,8 @@ import ModelFactory from "./models/factory";
 import WebGlLocation from "./utils/webgl/_location";
 import WebGlManager from "./utils/webgl/_manager";
 import WebGlRenderer from "./utils/webgl/_renderer";
-import { ManAnimation } from "./test/animation/man_animation";
-import { Man } from "./test/man";
+import { SheepAnimation as ManAnimation } from "./test/animation/sheep_animation";
+import { Sheep as Man } from "./test/sheep";
 import { Transformation, backwardSum, forwardSum, negate } from "./models/transformation";
 
 async function main() {
