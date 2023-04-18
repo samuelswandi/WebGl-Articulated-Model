@@ -4,6 +4,7 @@ import Model from "./model";
 import { Default } from "../test/default";
 import { Cube } from "../test/cube";
 import { Man } from "../test/man";
+import { Sheep } from "../test/sheep";
 import { ManAnimation } from "../test/animation/man_animation";
 import { Transformation } from "./transformation";
 export default class ModelFactory {
@@ -27,6 +28,10 @@ export default class ModelFactory {
 
 	man(): Model {
 		return this._recursiveObjectFactory(this.manager, this.location, Man);
+	}
+
+	sheep(): Model {
+		return this._recursiveObjectFactory(this.manager, this.location, Sheep);
 	}
 
 	_recursiveObjectFactory
