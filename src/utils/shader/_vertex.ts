@@ -50,7 +50,7 @@ void main() {
 
   mat4 viewModelMatrix = u_viewMatrix * u_modelMatrix;
   // send the view position to the fragment shader
-  v_modelPosition = vec3(u_worldViewProjection * a_position);
+  v_modelPosition = vec3(a_position);
   v_viewModelPosition = vec3(u_worldViewProjection * a_position);
 
 }
