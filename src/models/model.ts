@@ -56,7 +56,9 @@ export default class Model {
 
 
 		const bumpTexture = TextureFactory.getInstance(manager)!.getBumpTexture()!
-		this.textures = [bumpTexture];
+		const environmentTexture = TextureFactory.getInstance(manager)!.getEnvironmentTexture()!
+		
+		this.textures = [environmentTexture, bumpTexture];
 		this.initMouse!();
 	}
 
@@ -340,10 +342,14 @@ export default class Model {
 		const viewModelMatrix = m4.multiply(viewMatrix, this.shape.positions);
 		const normalMatrix = m4.inverseTranspose(viewModelMatrix);
 		this.gl!.uniformMatrix4fv(this.location!.normalMatrix, false, normalMatrix)
+		
+		this.gl!.uniform1i(this.location!.textureEnvironment, 1);
+		this.gl!.activeTexture(this.gl!.TEXTURE1);
+		this.gl!.bindTexture(this.gl!.TEXTURE_CUBE_MAP, this.textures[0]);
 
 		this.gl!.uniform1i(this.location!.textureBump, 2);
 		this.gl!.activeTexture(this.gl!.TEXTURE2);
-		this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.textures[0]);
+		this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.textures[1]);
 	}
 
 	setGeometry?() {

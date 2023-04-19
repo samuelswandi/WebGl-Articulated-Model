@@ -218,6 +218,7 @@ async function main() {
 
     selectElement.addEventListener("change", () => {
         const selectedOption = selectElement.options[selectElement.selectedIndex].value;
+        console.log(selectedOption)
         webGlManager.gl.uniform1i(webGlLocation.textureMode, Number(selectedOption))
     });
 
