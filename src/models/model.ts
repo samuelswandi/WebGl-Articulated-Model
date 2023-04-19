@@ -65,6 +65,15 @@ export default class Model {
 		this.initMouse!();
 	}
 
+	changeCameraPersObl() {
+		this.cameraAngle = degToRad(90);
+			let cAcontrol = document.getElementById(
+			"camera-angle"
+		) as HTMLInputElement;
+
+		cAcontrol.value = "-180";
+	}
+
 	// rotation
 	initMouse?() {
 		document.getElementById("canvas")!.addEventListener("mousemove", (e: MouseEvent) => {
@@ -101,17 +110,6 @@ export default class Model {
 		var zScale = document.getElementById("scale-z") as HTMLInputElement;
 
 		this.deltaScale = [+xScale.value, +yScale.value, +zScale.value];
-
-		// camera
-		let cRcontrol = document.getElementById(
-			"camera-radius"
-		) as HTMLInputElement;
-		let cAcontrol = document.getElementById(
-			"camera-angle"
-		) as HTMLInputElement;
-
-		this.cameraAngle = degToRad(+cAcontrol.value);
-		this.cameraRadius = +cRcontrol.value;
 	}
 
 	bind?() {
@@ -275,11 +273,11 @@ export default class Model {
       this.location!.bitangent, size, type, normalize, stride, offset);
 	}
 
-	uniforms?(projectionMatrix: number[], shading: boolean) {
+	uniforms?(projectionMatrix: number[], shading: boolean, cameraAngle: number, cameraRadius: number) {
 		// Use matrix math to compute a position on a circle where the camera is
 		let cameraMatrix = m4.identity();
-		cameraMatrix = m4.yRotate(cameraMatrix, this.cameraAngle);
-		cameraMatrix = m4.translate(cameraMatrix, 0, 0, this.cameraRadius);
+		cameraMatrix = m4.yRotate(cameraMatrix, cameraAngle);
+		cameraMatrix = m4.translate(cameraMatrix, 0, 0, cameraRadius);
 
 		// Get the camera's position from the matrix we computed
 		var cameraPosition = [
@@ -333,7 +331,7 @@ export default class Model {
 		this.gl!.uniform4fv(this.location!.color, [1, 1, 1, 1]); // green
 
 		// set the light direction.
-		this.gl!.uniform3fv(this.location!.light, normalize([0.5, 0.7, 1]));
+		this.gl!.uniform3fv(this.location!.light, normalize([0.2, 0.4, 1]));
 
 		// Tell the shader to use texture unit 0 for u_texture
 		this.gl!.uniform1i(this.location!.textureU, 0);
@@ -395,11 +393,11 @@ export default class Model {
 		);
 	}
 
-	_recursiveDraw?(projectionMatrix: number[], shading: boolean) {
+	_recursiveDraw?(projectionMatrix: number[], shading: boolean, cameraAngle: number, cameraRadius: number) {
 		this.attachUI!();
 		this.bind!();
 		this.buffers!();
-		this.uniforms!(projectionMatrix, shading);
+		this.uniforms!(projectionMatrix, shading, cameraAngle, cameraRadius);
 		
 		// draw
 		var primitiveType = this.gl!.TRIANGLES;
@@ -410,11 +408,11 @@ export default class Model {
 		// draw children
 		this.children.forEach((child) => {
 			child.texture = this.texture;  // TODO : Gotta edit this if want to change specific single texture
-			child._recursiveDraw!(projectionMatrix, shading);
+			child._recursiveDraw!(projectionMatrix, shading, cameraAngle, cameraRadius);
 		});
 	}
 
-	draw?(projectionMatrix: number[], shading: boolean) {
+	draw?(projectionMatrix: number[], shading: boolean, cameraAngle: number, cameraRadius: number) {
 		// Tell WebGL how to convert from clip space to pixels
 		this.gl!.viewport(0, 0, this.gl!.canvas.width, this.gl!.canvas.height);
 
@@ -429,7 +427,7 @@ export default class Model {
 		// Enable the depth buffer
 		this.gl!.enable(this.gl!.DEPTH_TEST);
 		
-		this._recursiveDraw!(projectionMatrix, shading);
+		this._recursiveDraw!(projectionMatrix, shading, cameraAngle, cameraRadius);
 	}
 
 	public getTangent(): number[] {

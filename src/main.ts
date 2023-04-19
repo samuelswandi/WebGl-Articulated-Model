@@ -5,6 +5,7 @@ import WebGlRenderer from "./utils/webgl/_renderer";
 import { SheepAnimation as ManAnimation } from "./test/animation/sheep_animation";
 import { Sheep as Man } from "./test/sheep";
 import { backwardSum, forwardSum, negate } from "./models/transformation";
+
 async function main() {
     const webGlManager = new WebGlManager();
     const webGlLocation = new WebGlLocation(webGlManager);

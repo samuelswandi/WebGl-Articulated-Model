@@ -8,7 +8,12 @@
 	</head>
 	<body>
 		<div id="app">
-			<canvas id="canvas" style="border: 1px solid black;" width="600" height="600"></canvas>
+			<canvas
+				id="canvas"
+				style="border: 1px solid black"
+				width="600"
+				height="600"
+			></canvas>
 		</div>
 
 		<div>
@@ -128,9 +133,7 @@
 				<input id="shading" type="checkbox" checked="checked" />
 			</div>
 			<div class="camera-angle">
-				<label for="camera-angle"
-					> camera angle</label
-				>
+				<label for="camera-angle"> camera angle</label>
 				<input
 					class="form-range"
 					type="range"
@@ -142,9 +145,7 @@
 				/>
 			</div>
 			<div class="camera-radius">
-				<label for="camera-radius"
-					>camera radius</label
-				>
+				<label for="camera-radius">camera radius</label>
 				<input
 					class="form-range"
 					type="range"
@@ -157,34 +158,58 @@
 			</div>
 			<div class="animation-columns">
 				<div>
-				  <div class="horizontal-box justify-center">
-					<button id="play-button">⏵︎</button>
-					<button id="pause-button" disabled>⏸︎</button>
-					<button id="reverse-play-button">Reverse Play</button>
-					<p>Start Frame</p><input type="number" id ="start-frame">
-					<p>End Frame</p><input type="number" id ="end-frame">
-					<button id="loop-play-button">Loop Play</button>
-					<p>Frame Rate</p>
-					<input type="range" id="frame-rate" min="0.05" max="0.4" value="0.2" step="0.05" />
-					<span id = "frame-rate-text">0.2</span>
-				  </div>
-		
-				<div class="horizontal-box justify-start">
-					<div class="horizontal-box half-width">
-						<button id="first-frame">&lt;&lt;</button>
-						<button id="prev-frame">&lt;</button>
-						<button id="next-frame">&gt;</button>
-						<button id="last-frame">&gt;&gt;</button>
+					<div class="horizontal-box justify-center">
+						<button id="play-button">⏵︎</button>
+						<button id="pause-button" disabled>⏸︎</button>
+						<button id="reverse-play-button">Reverse Play</button>
+						<p>Start Frame</p>
+						<input type="number" id="start-frame" />
+						<p>End Frame</p>
+						<input type="number" id="end-frame" />
+						<button id="loop-play-button">Loop Play</button>
+						<p>Frame Rate</p>
+						<input
+							type="range"
+							id="frame-rate"
+							min="0.05"
+							max="0.4"
+							value="0.2"
+							step="0.05"
+						/>
+						<span id="frame-rate-text">0.2</span>
 					</div>
-					<div>You are now at frame <span id="cur-frame-id">1</span> / <span id="total-frame-id">X</span></div>
+
+					<div class="horizontal-box justify-start">
+						<div class="horizontal-box half-width">
+							<button id="first-frame">&lt;&lt;</button>
+							<button id="prev-frame">&lt;</button>
+							<button id="next-frame">&gt;</button>
+							<option></option>
+							<button id="last-frame">&gt;&gt;</button>
+						</div>
+						<div>
+							You are now at frame
+							<span id="cur-frame-id">1</span> /
+							<span id="total-frame-id">X</span>
+						</div>
+					</div>
 				</div>
 			</div>
-				
-			  </div>
 		</div>
 
 		<div id="sub-tree">
 			<div>
+				<label>Projection Type: </label>
+
+				<select id="projection">
+					<option value="0">perspective</option>
+					<option value="1">orthographic</option>
+					<option value="2">oblique</option>
+				</select>
+			</div>
+
+			<div>
+				<label>Texture Type: </label>
 				<select name="" id="texture-choices">
 					<option value="0">None</option>
 					<option value="1">Image</option>
@@ -193,7 +218,6 @@
 				</select>
 			</div>
 		</div>
-
 	</body>
 	<script type="module" src="/src/main.ts"></script>
 </html>
