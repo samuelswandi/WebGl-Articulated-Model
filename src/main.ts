@@ -13,7 +13,7 @@ async function main() {
 
 
     // TODO : Conditional by selected model (UI blm)
-    let model = modelFactory.sheep();
+    let model = modelFactory.chicken();
     const webGlRenderer = new WebGlRenderer(webGlManager);
 
     // TODO : Animation unpack conditional by selected model (UI blm)

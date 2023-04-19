@@ -7,6 +7,7 @@ import { Man } from "../test/man";
 import { Sheep } from "../test/sheep";
 import { ManAnimation } from "../test/animation/man_animation";
 import { Transformation } from "./transformation";
+import { Chicken } from "../test/chicken";
 export default class ModelFactory {
 	manager: WebGlManager;
 	location: WebGlLocation;
@@ -32,6 +33,10 @@ export default class ModelFactory {
 
 	sheep(): Model {
 		return this._recursiveObjectFactory(this.manager, this.location, Sheep);
+	}
+
+	chicken() : Model {
+		return this._recursiveObjectFactory(this.manager, this.location, Chicken);
 	}
 
 	_recursiveObjectFactory
