@@ -19,6 +19,7 @@ export default class WebGlLocation {
 	public normalMatrix: WebGLUniformLocation;
 	
 	public textureBump: WebGLUniformLocation;
+	public textureEnvironment : WebGLUniformLocation;
 	public tangent: number;
 	public bitangent: number;
 
@@ -43,6 +44,7 @@ export default class WebGlLocation {
 	
 		this.normalMatrix = this.gl.getUniformLocation(this.program, "u_normalMatrix")!;
 		this.textureBump = this.gl.getUniformLocation(this.program, "u_texture_bump")!;
+		this.textureEnvironment = this.gl.getUniformLocation(this.program, "u_texture_environment")!;
 		this.tangent = this.gl.getAttribLocation(this.program, "a_tangent");
     this.bitangent = this.gl.getAttribLocation(this.program, "a_bitangent");
 

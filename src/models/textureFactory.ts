@@ -27,7 +27,7 @@ export class TextureFactory {
     this.gl = glManager.gl
   }
 
-  public loadImage(): WebGLTexture | null{
+  public getImageTexture(): WebGLTexture | null{
     const url = "../../assets/sun.jpg"
     return this.loadTexture2D(url)
   }
@@ -38,14 +38,69 @@ export class TextureFactory {
   }
 
 
-  public environment(glManager: WebGlManager): WebGLTexture | null {
-    const gl = glManager.gl
-    
-    const texture = gl.createTexture()
-    gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture)
-  
-    gl.generateMipmap(gl.TEXTURE_CUBE_MAP)
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR)
+  public getEnvironmentTexture(): WebGLTexture | null {
+    // Create the texture.
+    let texture = this.gl.createTexture()
+
+    // Bind the texture.
+    this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, texture);
+
+    const faceInfos = [
+      {
+        target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_X,
+        url: '/src/assets/pos-x.jpg',
+      },
+      {
+        target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
+        url: '/src/assets/neg-x.jpg',
+      },
+      {
+        target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
+        url: '/src/assets/pos-y.jpg',
+      },
+      {
+        target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+        url: '/src/assets/neg-y.jpg',
+      },
+      {
+        target: this.gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+        url: '/src/assets/pos-z.jpg',
+      },
+      {
+        target: this.gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+        url: '/src/assets/neg-z.jpg',
+      },
+    ];
+    faceInfos.forEach((faceInfo) => {
+      const { target, url } = faceInfo;
+
+      // Upload the canvas to the cubemap face.
+      const level = 0;
+      const internalFormat = this.gl.RGBA;
+      const width = 512;
+      const height = 512;
+      const format = this.gl.RGBA;
+      const type = this.gl.UNSIGNED_BYTE;
+
+      // setup each face so it's immediately renderable
+      this.gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
+
+      // Asynchronously load an image
+      const image = new Image();
+      image.src = url;
+      image.crossOrigin = "";   // ask for CORS permission
+      
+      const gl = this.gl;
+      image.addEventListener('load', function () {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+        gl.texImage2D(target, level, internalFormat, format, type, image);
+        gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+      });
+    });
+    this.gl.generateMipmap(this.gl.TEXTURE_CUBE_MAP);
+    this.gl.texParameteri(this.gl.TEXTURE_CUBE_MAP, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR_MIPMAP_LINEAR);
+
     return texture;
   }
 
