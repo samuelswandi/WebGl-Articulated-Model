@@ -1,7 +1,8 @@
-import { degToRad, isPowerOf2, m4, normalize } from "../math/mat4";
+import { degToRad, isPowerOf2, m4, normalize, subtractVectors } from "../math/mat4";
 import WebGlLocation from "../utils/webgl/_location";
 import WebGlManager from "../utils/webgl/_manager";
 import Shape from "./shape";
+import { TextureFactory } from "./textureFactory";
 
 export default class Model {
 	gl?: WebGLRenderingContext;
@@ -37,6 +38,11 @@ export default class Model {
 	// Child models
 	children: Model[] = [];
 
+	textures: WebGLTexture[];
+
+	tangentBuffer?: WebGLBuffer;
+	bitangentBuffer?: WebGLBuffer;
+
 	constructor(manager: WebGlManager, location: WebGlLocation, shape: Shape) {
 		this.location = location;
 		this.gl = manager.gl;
@@ -48,6 +54,14 @@ export default class Model {
 		this.normalBuffer = this.gl.createBuffer()!;
 		this.textureBuffer = this.gl.createBuffer()!;
 
+		this.tangentBuffer = this.gl.createBuffer()!;
+		this.bitangentBuffer = this.gl.createBuffer()!;
+
+		const imageTexture = TextureFactory.getInstance(manager)!.getImageTexture()!
+		const bumpTexture = TextureFactory.getInstance(manager)!.getBumpTexture()!
+		const environmentTexture = TextureFactory.getInstance(manager)!.getEnvironmentTexture()!
+		
+		this.textures = [imageTexture, environmentTexture, bumpTexture];
 		this.initMouse!();
 	}
 
@@ -124,15 +138,15 @@ export default class Model {
 		);
 
 		// Now that the image has loaded make copy it to the texture.
-		this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
-		this.gl!.texImage2D(
-			this.gl!.TEXTURE_2D,
-			0,
-			this.gl!.RGBA,
-			this.gl!.RGBA,
-			this.gl!.UNSIGNED_BYTE,
-			this.texture!
-		);
+		// this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
+		// this.gl!.texImage2D(
+		// 	this.gl!.TEXTURE_2D,
+		// 	0,
+		// 	this.gl!.RGBA,
+		// 	this.gl!.RGBA,
+		// 	this.gl!.UNSIGNED_BYTE,
+		// 	this.texture!
+		// );
 
 		// Check if the image is a power of 2 in both dimensions.
 		if (isPowerOf2(this.texture!.width) && isPowerOf2(this.texture!.height)) {
@@ -156,6 +170,16 @@ export default class Model {
 				this.gl!.LINEAR
 			);
 		}
+
+		// Start binding the tangent buffers.
+		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.tangentBuffer!);
+		// Set the tangent.
+		this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(this.getTangent()), this.gl!.STATIC_DRAW);
+		
+		// Start binding the bitangent buffers.
+		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.bitangentBuffer!);
+		// Set the bitangent.
+		this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(this.getBitangent()), this.gl!.STATIC_DRAW);
 	}
 
 	buffers?() {
@@ -215,6 +239,38 @@ export default class Model {
 			stride,
 			offset
 		);
+
+		// TANGENT.
+    // Turn on the tangent attribute
+    this.gl!.enableVertexAttribArray(this.location!.tangent);
+
+    // Bind the tangent buffer.
+    this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.tangentBuffer!);
+
+    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 3;          // 3 components per iteration
+    var type = this.gl!.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    this.gl!.vertexAttribPointer(
+      this.location!.tangent, size, type, normalize, stride, offset);
+
+    // BITANGENT.
+    // Turn on the bitangent attribute
+    this.gl!.enableVertexAttribArray(this.location!.bitangent);
+
+    // Bind the bitangent buffer.
+    this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.bitangentBuffer!);
+
+    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    var size = 3;          // 3 components per iteration
+    var type = this.gl!.FLOAT;   // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0;        // start at the beginning of the buffer
+    this.gl!.vertexAttribPointer(
+      this.location!.bitangent, size, type, normalize, stride, offset);
 	}
 
 	uniforms?(projectionMatrix: number[], shading: boolean, cameraAngle: number, cameraRadius: number) {
@@ -282,6 +338,23 @@ export default class Model {
 
 		// set shading
 		this.gl!.uniform1i(this.location!.shading, Number(shading));
+
+		// set normal matrix
+		const viewModelMatrix = m4.multiply(viewMatrix, this.shape.positions);
+		const normalMatrix = m4.inverseTranspose(viewModelMatrix);
+		this.gl!.uniformMatrix4fv(this.location!.normalMatrix, false, normalMatrix)
+		
+		this.gl!.uniform1i(this.location!.textureImage, 0);
+		this.gl!.activeTexture(this.gl!.TEXTURE0);
+		this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.textures[0]);
+
+		this.gl!.uniform1i(this.location!.textureEnvironment, 1);
+		this.gl!.activeTexture(this.gl!.TEXTURE1);
+		this.gl!.bindTexture(this.gl!.TEXTURE_CUBE_MAP, this.textures[1]);
+
+		this.gl!.uniform1i(this.location!.textureBump, 2);
+		this.gl!.activeTexture(this.gl!.TEXTURE2);
+		this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.textures[2]);
 	}
 
 	setGeometry?() {
@@ -355,5 +428,35 @@ export default class Model {
 		this.gl!.enable(this.gl!.DEPTH_TEST);
 		
 		this._recursiveDraw!(projectionMatrix, shading, cameraAngle, cameraRadius);
+	}
+
+	public getTangent(): number[] {
+		let vertexTangents: number[] = [];
+		for (let i = 0; i < this.shape.positions.length; i += 18) {
+			const p1 = [this.shape.positions[i], this.shape.positions[i+1], this.shape.positions[i+2]];
+			const p2 = [this.shape.positions[i+3], this.shape.positions[i+4], this.shape.positions[i+5]];
+			const vec1 = subtractVectors(p2, p1);
+			const vecTangent = normalize(vec1);
+
+			for (let j = 0; j < 6; j++){
+				vertexTangents = vertexTangents.concat(vecTangent);
+			}
+		}
+		return vertexTangents;
+	}
+
+	public getBitangent() : number[] {
+		let vertexBitangents: number[] = [];
+		for (let i = 0; i < this.shape.positions.length; i += 18) {
+			const p1 = [this.shape.positions[i], this.shape.positions[i+1], this.shape.positions[i+2]];
+			const p3 = [this.shape.positions[i+6], this.shape.positions[i+7], this.shape.positions[i+8]];
+			const vec = subtractVectors(p3, p1);
+			const vecBitangent = normalize(vec);
+
+			for (let j = 0; j < 6; j++){
+				vertexBitangents = vertexBitangents.concat(vecBitangent);
+			}
+		}
+		return vertexBitangents;
 	}
 }

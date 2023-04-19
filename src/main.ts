@@ -12,6 +12,7 @@ async function main() {
 
     const modelFactory = new ModelFactory(webGlManager, webGlLocation);
 
+
     // TODO : Conditional by selected model (UI blm)
     let model = modelFactory.sheep();
     const webGlRenderer = new WebGlRenderer(webGlManager);
@@ -214,7 +215,14 @@ async function main() {
         }
     }, 100);
 
-    
+    const selectElement = document.getElementById("texture-choices") as HTMLSelectElement;
+
+    selectElement.addEventListener("change", () => {
+        const selectedOption = selectElement.options[selectElement.selectedIndex].value;
+        console.log(selectedOption)
+        webGlManager.gl.uniform1i(webGlLocation.textureMode, Number(selectedOption))
+    });
+
     var img = new Image();
     img.src = "creeper.jpg";
     img.onload = () => {
