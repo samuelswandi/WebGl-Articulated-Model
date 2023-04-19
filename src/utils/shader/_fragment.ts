@@ -15,6 +15,7 @@ varying vec2 v_texcoord;
 
 // The texture.
 uniform sampler2D u_texture;
+uniform sampler2D u_texture_image;
 uniform samplerCube u_texture_environment;
 uniform sampler2D u_texture_bump;
 
@@ -32,7 +33,9 @@ void main() {
   vec3 normal = normalize(v_normal);
   float light = dot(normal, u_reverseLightDirection);
 
-  if(u_textureMode == 2) {
+  if(u_textureMode == 1) {
+    gl_FragColor = texture2D(u_texture_image, v_texcoord);
+  } else if(u_textureMode == 2) {
     // Reflection direction.
     vec3 eyeToSurfaceDir = normalize(v_modelPosition - u_worldCameraPosition);
     vec3 reflectionDir = reflect(eyeToSurfaceDir, v_normal);
