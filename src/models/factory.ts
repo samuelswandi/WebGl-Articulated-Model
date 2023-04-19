@@ -65,7 +65,6 @@ export default class ModelFactory {
 		model : Model,
 	) : [Model, number]
 	{
-		console.log(model.name)
 		model.translation[0] += trs[idx].translation[0];
 		model.translation[1] += trs[idx].translation[1];
 		model.translation[2] += trs[idx].translation[2];
@@ -84,7 +83,6 @@ export default class ModelFactory {
 			[model.children[i], idx] = this._recursiveTransformationFactory(trs, idx, model.children[i]);
 		}
 
-		console.log(model)
 		return [model, idx];
 	}
 }

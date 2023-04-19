@@ -7,22 +7,24 @@ import { ChickenAnimation } from "./test/animation/chicken_animation";
 import { Man } from "./test/man";
 import { Chicken } from "./test/chicken";
 import { Sheep } from "./test/sheep";
-import { backwardSum, forwardSum, negate } from "./models/transformation";
+import { Transformation, backwardSum, forwardSum, negate } from "./models/transformation";
 import { ManAnimation } from "./test/animation/man_animation";
+
+import Model from "./models/model";
 
 async function main() {
     const webGlManager = new WebGlManager();
     const webGlLocation = new WebGlLocation(webGlManager);
-
-    const modelFactory = new ModelFactory(webGlManager, webGlLocation);
-
-
-    // TODO : Conditional by selected model (UI blm)
-    let model = modelFactory.chicken();
-    // TODO : Animation unpack conditional by selected model (UI blm)
-    const anim = ChickenAnimation;
-    const baseModel = Chicken;
     const webGlRenderer = new WebGlRenderer(webGlManager);
+    
+    const modelFactory = new ModelFactory(webGlManager, webGlLocation);
+    const selectModel = document.getElementById("texture-choices") as HTMLSelectElement;
+
+    // TODO: Model Change , with Anim
+    let model : Model = modelFactory.chicken();
+    let baseModel : Model = Chicken;
+    let anim : Transformation[][] = ChickenAnimation;
+
 
     const totalFrameText = document.getElementById("total-frame-id") as HTMLTextAreaElement;
     totalFrameText.textContent = (anim.length).toString();
