@@ -37,6 +37,36 @@ export default class WebGlRenderer {
 
 		this.cameraAngle = degToRad(+cAcontrol.value);
 		this.cameraRadius = +cRcontrol.value;
+
+		// projection
+		let projType = document.getElementById("projection") as HTMLSelectElement;
+
+		projType.addEventListener("change", () => {
+			const selectedOption = +projType.options[projType.selectedIndex].value;
+
+			switch (selectedOption) {
+				case 0: 
+					this.setProjection(PROJECTION.PERSPECTIVE)
+					break
+
+				case 1:
+					this.setProjection(PROJECTION.ORTHOGRAPHIC)
+					break
+
+				case 2:
+					this.setProjection(PROJECTION.OBLIQUE)
+					break
+
+			}
+		});
+	}
+
+	private changeCameraPers() {
+		let cAcontrol = document.getElementById(
+			"camera-angle"
+		) as HTMLInputElement;
+
+		cAcontrol.value = "-0";
 	}
 
 	private changeCameraOrtObl() {
@@ -78,6 +108,8 @@ export default class WebGlRenderer {
         switch(projection) {
             case PROJECTION.PERSPECTIVE:
                 this.projectionMatrix = m4.perspective(fov, aspect, zNear, zFar);
+				this.changeCameraPers();
+
                 break;
 
             case PROJECTION.OBLIQUE:
