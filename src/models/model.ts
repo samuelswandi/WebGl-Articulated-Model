@@ -54,6 +54,9 @@ export default class Model {
 		this.normalBuffer = this.gl.createBuffer()!;
 		this.textureBuffer = this.gl.createBuffer()!;
 
+		this.tangentBuffer = this.gl.createBuffer()!;
+		this.bitangentBuffer = this.gl.createBuffer()!;
+
 		const imageTexture = TextureFactory.getInstance(manager)!.getImageTexture()!
 		const bumpTexture = TextureFactory.getInstance(manager)!.getBumpTexture()!
 		const environmentTexture = TextureFactory.getInstance(manager)!.getEnvironmentTexture()!
@@ -137,15 +140,15 @@ export default class Model {
 		);
 
 		// Now that the image has loaded make copy it to the texture.
-		this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
-		this.gl!.texImage2D(
-			this.gl!.TEXTURE_2D,
-			0,
-			this.gl!.RGBA,
-			this.gl!.RGBA,
-			this.gl!.UNSIGNED_BYTE,
-			this.texture!
-		);
+		// this.gl!.bindTexture(this.gl!.TEXTURE_2D, texture);
+		// this.gl!.texImage2D(
+		// 	this.gl!.TEXTURE_2D,
+		// 	0,
+		// 	this.gl!.RGBA,
+		// 	this.gl!.RGBA,
+		// 	this.gl!.UNSIGNED_BYTE,
+		// 	this.texture!
+		// );
 
 		// Check if the image is a power of 2 in both dimensions.
 		if (isPowerOf2(this.texture!.width) && isPowerOf2(this.texture!.height)) {

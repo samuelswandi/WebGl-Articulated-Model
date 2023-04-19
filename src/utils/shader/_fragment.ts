@@ -53,10 +53,9 @@ void main() {
     // Lighting diffuse.
     vec3 norm = normalize(texture2D(u_texture_bump, v_texcoord).rgb * 2.0 - 1.0);
     float diffuse = max(dot(lightDir, norm), 0.0);
-    
-    gl_FragColor = vec4(albedo, 1.0);
+    gl_FragColor = vec4(albedo + ambient, 1.0);
   } else {
-    gl_FragColor = u_color * texelColor;
+    gl_FragColor = u_color;
   }
   
   if (u_shading) {
