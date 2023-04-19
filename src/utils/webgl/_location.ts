@@ -24,6 +24,8 @@ export default class WebGlLocation {
 	public tangent: number;
 	public bitangent: number;
 
+	public worldCameraPosition: WebGLUniformLocation;
+
 	public textureMode: WebGLUniformLocation;
 
 	constructor(manager: WebGlManager) {
@@ -54,6 +56,6 @@ export default class WebGlLocation {
     this.bitangent = this.gl.getAttribLocation(this.program, "a_bitangent");
 
 		this.textureMode = this.gl.getUniformLocation(this.program, "u_textureMode")!;
-	
+		this.worldCameraPosition = this.gl.getUniformLocation(this.program, "u_worldCameraPosition")!;
 	}
 }

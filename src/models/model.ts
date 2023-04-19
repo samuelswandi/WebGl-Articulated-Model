@@ -293,6 +293,7 @@ export default class Model {
 
 		// Make a view matrix from the camera matrix.
 		var viewMatrix = m4.inverse(cameraMatrix);
+		this.gl!.uniform3fv(this.location!.worldCameraPosition, cameraPosition);
 
 		// Compute a view projection matrix
 		var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
