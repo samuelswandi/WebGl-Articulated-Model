@@ -28,7 +28,7 @@ export class TextureFactory {
   }
 
   public getImageTexture(): WebGLTexture | null{
-    const url = "../../assets/sun.jpg"
+    const url = "/src/assets/sun.jpg"
     return this.loadTexture2D(url)
   }
   
