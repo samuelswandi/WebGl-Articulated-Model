@@ -4,13 +4,13 @@ import WebGlManager from "./utils/webgl/_manager";
 import WebGlRenderer from "./utils/webgl/_renderer";
 import { SheepAnimation as ManAnimation } from "./test/animation/sheep_animation";
 import { Sheep as Man } from "./test/sheep";
-import { Transformation, backwardSum, forwardSum, negate } from "./models/transformation";
-
+import { backwardSum, forwardSum, negate } from "./models/transformation";
 async function main() {
     const webGlManager = new WebGlManager();
     const webGlLocation = new WebGlLocation(webGlManager);
 
     const modelFactory = new ModelFactory(webGlManager, webGlLocation);
+
 
     // TODO : Conditional by selected model (UI blm)
     let model = modelFactory.sheep();
@@ -214,7 +214,13 @@ async function main() {
         }
     }, 100);
 
-    
+    const selectElement = document.getElementById("texture-choices") as HTMLSelectElement;
+
+    selectElement.addEventListener("change", () => {
+        const selectedOption = selectElement.options[selectElement.selectedIndex].value;
+        webGlManager.gl.uniform1i(webGlLocation.textureMode, Number(selectedOption))
+    });
+
     var img = new Image();
     img.src = "creeper.jpg";
     img.onload = () => {

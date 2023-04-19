@@ -16,6 +16,13 @@ export default class WebGlLocation {
 	public world: WebGLUniformLocation;
 	public worldView: WebGLUniformLocation;
 	public textureU: WebGLUniformLocation;
+	public normalMatrix: WebGLUniformLocation;
+	
+	public textureBump: WebGLUniformLocation;
+	public tangent: number;
+	public bitangent: number;
+
+	public textureMode: WebGLUniformLocation;
 
 	constructor(manager: WebGlManager) {
 		this.gl = manager.gl;
@@ -33,5 +40,13 @@ export default class WebGlLocation {
 		this.world = this.gl.getUniformLocation(this.program, "u_world")!;
 		this.worldView = this.gl.getUniformLocation(this.program, "u_worldViewProjection")!;
 		this.textureU = this.gl.getUniformLocation(this.program, "u_texture")!;
+	
+		this.normalMatrix = this.gl.getUniformLocation(this.program, "u_normalMatrix")!;
+		this.textureBump = this.gl.getUniformLocation(this.program, "u_texture_bump")!;
+		this.tangent = this.gl.getAttribLocation(this.program, "a_tangent");
+    this.bitangent = this.gl.getAttribLocation(this.program, "a_bitangent");
+
+		this.textureMode = this.gl.getUniformLocation(this.program, "u_textureMode")!;
+	
 	}
 }

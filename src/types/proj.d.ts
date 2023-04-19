@@ -4,3 +4,10 @@ export enum PROJECTION {
 	PERSPECTIVE = "PERSPECTIVE",
 	OBLIQUE = "OBLIQUE",
 }
+
+export enum TEXTURE {
+	NONE= 0,
+	BUMP = 3 ,
+	ENVIRONMENT = 2,
+	IMAGE = 1
+}
