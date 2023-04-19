@@ -1,5 +1,3 @@
-import { Cube } from "../cube"
-import Model from "../../models/model"
 import { Transformation } from "../../models/transformation"
 
 export const SheepAnimation : Transformation[][] = [

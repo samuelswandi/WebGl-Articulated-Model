@@ -26,7 +26,7 @@ export const Chicken : Model = {
             ]
         },
         {
-            "name" : "Left Arm",
+            "name" : "Left Wing",
             "shape" : Cube,
             "translation" : [82.5, -20, 10],
             "rotation" : [0, 0, 0],
@@ -34,7 +34,7 @@ export const Chicken : Model = {
             "children" : []
         },
         {
-            "name" : "Right Arm",
+            "name" : "Right Wing",
             "shape" : Cube,
             "translation" : [-62.5, -20, 10],
             "rotation" : [0, 0, 0],
