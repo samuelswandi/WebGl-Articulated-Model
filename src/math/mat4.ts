@@ -449,11 +449,6 @@ const m4 = {
 		];
 	},
 
-	inverseTranspose: function (m) {
-		let mat = this.inverse(m)
-		return this.transpose(mat)
-  },
-
 	/**
 	 * @description create translation matrix
 	 * @param {number} tx translation x
@@ -595,10 +590,7 @@ const m4 = {
 		dst[2] = (v0 * m[0 * 4 + 2] + v1 * m[1 * 4 + 2] + v2 * m[2 * 4 + 2] + m[3 * 4 + 2]) / d;
 	
 		return dst;
-	  },
-	subtractVectors: function(a: number[], b: number[]) {
-			return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-	}
+	  }
 };
 
 

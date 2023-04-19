@@ -11,9 +11,5 @@
   "devDependencies": {
     "typescript": "^4.9.3",
     "vite": "^4.2.0"
-  },
-  "dependencies": {
-    "path": "^0.12.7",
-    "url": "^0.11.0"
   }
 }
