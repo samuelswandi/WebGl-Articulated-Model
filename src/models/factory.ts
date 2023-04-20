@@ -45,6 +45,30 @@ export default class ModelFactory {
 		return this._recursiveObjectFactory(this.manager, this.location, Fly);
 	}
 
+	custom(model: Model): Model {
+		return this._recursiveObjectFactoryLoad(this.manager, this.location, model);
+	}
+
+	_recursiveObjectFactoryLoad
+	(
+		manager : WebGlManager, 
+		loc : WebGlLocation, 
+		model : Model, 
+	) : Model
+	{
+		let res = new Model(manager, loc, model.shape);
+		res.translation = model.translation;
+		res.rotation = model.rotation;
+		res.scale = model.scale;
+		res.nameComponent = model.nameComponent;
+
+		// children
+		for (let i = 0 ; i < model.children.length ; i++){
+			res.children.push(this._recursiveObjectFactoryLoad(manager, loc, model.children[i]));
+		}
+		return res;
+	}
+
 	_recursiveObjectFactory
 	(
 		manager : WebGlManager, 

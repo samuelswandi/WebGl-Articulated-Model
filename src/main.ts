@@ -37,15 +37,76 @@ async function main() {
     const nextFrame = document.getElementById("next-frame") as HTMLButtonElement;
     const prevFrame = document.getElementById("prev-frame") as HTMLButtonElement;
     const compSubTree = document.getElementById("comp-sub-tree") as HTMLButtonElement;
-    const save = document.getElementById("save") as HTMLButtonElement;
-    const changeModel = document.getElementById("model") as HTMLButtonElement;
+    const save = document.getElementById("save") as HTMLInputElement;
+    const load = document.getElementById("load") as HTMLInputElement;
+    const changeModel = document.getElementById("model") as HTMLSelectElement;
 
     save.onclick = () => {
-        Save(model);
+        Save(model, baseModel, anim);
+    }
+
+    load.onclick = () => {
+        var load = document.getElementById("load") as HTMLInputElement;
+	    load.onchange = function () {
+            var file = load!.files![0] as File;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                webGlRenderer = new WebGlRenderer(webGlManager);
+                var content = String(e!.target!.result);
+                var parsedData = JSON.parse(content);
+                var xControl = document.getElementById("translate-x") as HTMLInputElement;
+                var yControl = document.getElementById("translate-y") as HTMLInputElement;
+                var zControl = document.getElementById("translate-z") as HTMLInputElement;
+
+                var xScale = document.getElementById("scale-x") as HTMLInputElement;
+                var yScale = document.getElementById("scale-y") as HTMLInputElement;
+                var zScale = document.getElementById("scale-z") as HTMLInputElement;
+
+                let cRcontrol = document.getElementById(
+                    "camera-radius"
+                ) as HTMLInputElement;
+                let cAcontrol = document.getElementById(
+                    "camera-angle"
+                ) as HTMLInputElement;
+                let shading = document.getElementById(
+                    "shading"
+                ) as HTMLInputElement
+
+                const selectElement = document.getElementById("texture-choices") as HTMLSelectElement;
+                selectElement.selectedIndex = parsedData.element
+                console.log(parsedData.element)
+                webGlManager.gl.uniform1i(webGlLocation.textureMode, Number(parsedData.element))
+
+                xControl.value = parsedData.translateX;
+                yControl.value = parsedData.translateY;
+                zControl.value = parsedData.translateZ;
+                xScale.value = parsedData.scaleX;
+                yScale.value = parsedData.scaleY;
+                zScale.value = parsedData.scaleZ;
+                cRcontrol.value = parsedData.cameraRadiusControl;
+                cAcontrol.value = (+parsedData.cameraAngleControl).toString();
+                shading.checked = "on" == parsedData.shading ? true : false;
+
+                model = modelFactory.custom(parsedData.model);
+                baseModel = parsedData.baseModel;
+                anim = parsedData.anim;
+
+                if(parsedData.type == "chicken") {
+                    changeModel.selectedIndex = 0
+                } else if(parsedData.type == "man") {
+                    changeModel.selectedIndex = 1
+                } else if (parsedData.type == "sheep") {
+                    changeModel.selectedIndex = 2
+                } else if (parsedData.type == "fly") {
+                    changeModel.selectedIndex = 3
+                }
+                reload();
+            };
+            reader.readAsText(file);
+        };
     }
 
     const reload = () => {        
-        const modelFactory = new ModelFactory(webGlManager, webGlLocation);
         totalFrameText.textContent = (anim.length).toString();
         let arrayOfChildren = `<div class="square ml-1">
                                     ${model.nameComponent}
@@ -281,6 +342,7 @@ async function main() {
     }
 
     changeModel.onchange = () => {
+        webGlRenderer = new WebGlRenderer(webGlManager);
         if(changeModel.value === "chicken") {
             model = modelFactory.chicken();
             baseModel = Chicken;
@@ -293,9 +355,11 @@ async function main() {
             model = modelFactory.sheep();
             baseModel = Sheep;
             anim = SheepAnimation;
+        } else if (changeModel.value === "fly") {
+            model = modelFactory.fly();
+            baseModel = Fly;
+            // anim = FlyAnimation;
         }
-        webGlLocation = new WebGlLocation(webGlManager);
-        webGlRenderer = new WebGlRenderer(webGlManager);
         reload();
     }
 

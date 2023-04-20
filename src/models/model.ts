@@ -26,10 +26,10 @@ export default class Model {
 	rotation: [number, number, number] = [0, 0, 0];
 	
 	// UI movement
-	deltaTranslation?: [number, number, number] = [0, 0, 0];
-	deltaScale?: [number, number, number] = [1, 1, 1];
-	cameraAngle? = degToRad(0);
-	cameraRadius? = 500;
+	deltaTranslation: [number, number, number] = [0, 0, 0];
+	deltaScale: [number, number, number] = [1, 1, 1];
+	cameraAngle = degToRad(0);
+	cameraRadius = 500;
 	
 	// mouse rot
 	mouse?: [number, number] = [0,0];
@@ -43,6 +43,29 @@ export default class Model {
 
 	tangentBuffer?: WebGLBuffer;
 	bitangentBuffer?: WebGLBuffer;
+
+	load(model: Model) {
+		this.deltaTranslation = model.deltaTranslation;
+		this.deltaScale = model.deltaScale;
+		this.cameraAngle = model.cameraAngle;
+		this.cameraRadius = model.cameraRadius;
+	}
+
+	setDeltaTranslation(deltaTranslation: [number, number, number]) {
+		this.deltaTranslation = deltaTranslation;
+	}
+
+	setDeltaScale(deltaScale: [number, number, number]) {
+		this.deltaScale = [+deltaScale[0], +deltaScale[1], +deltaScale[2]];
+	}
+
+	setCameraAngle(cameraAngle: number) {
+		this.cameraAngle = cameraAngle;
+	}
+
+	setCameraRadius(cameraRadius: number) {
+		this.cameraRadius = cameraRadius;
+	}
 
 	constructor(manager: WebGlManager, location: WebGlLocation, shape: Shape) {
 		this.location = location;
