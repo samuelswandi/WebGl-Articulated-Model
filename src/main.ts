@@ -75,7 +75,6 @@ async function main() {
 
                 const selectElement = document.getElementById("texture-choices") as HTMLSelectElement;
                 selectElement.selectedIndex = parsedData.element
-                console.log(parsedData.element)
                 webGlManager.gl.uniform1i(webGlLocation.textureMode, Number(parsedData.element))
 
                 xControl.value = parsedData.translateX;
@@ -111,6 +110,7 @@ async function main() {
         const modelFactory = new ModelFactory(webGlManager, webGlLocation);
         totalFrameText.textContent = (anim.length).toString();
 
+        compSubTree.innerHTML = "";
         let component = document.createElement("div");
         component.innerText = model.nameComponent!;
         component.classList.add("square")
@@ -335,7 +335,6 @@ async function main() {
 
         selectElement.addEventListener("change", () => {
             const selectedOption = selectElement.options[selectElement.selectedIndex].value;
-            console.log(selectedOption)
             webGlManager.gl.uniform1i(webGlLocation.textureMode, Number(selectedOption))
         });
 

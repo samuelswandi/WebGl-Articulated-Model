@@ -2,7 +2,6 @@ import Model from "../../models/model";
 import { Transformation } from "../../models/transformation";
 
 export const Save = (model: Model, baseModel: Model, anim: Transformation[][]) => {
-    console.log(model)
     let translateX = document.getElementById("translate-x") as HTMLInputElement
 	let translateY = document.getElementById("translate-y") as HTMLInputElement
 	let translateZ = document.getElementById("translate-z") as HTMLInputElement
@@ -52,11 +51,10 @@ export const Save = (model: Model, baseModel: Model, anim: Transformation[][]) =
         "cameraAngleControl": cameraAngle.value,
         "cameraRadiusControl": cameraRadius.value,
         "type": changeModel.value,
-        "element": selectElement.options[selectElement.selectedIndex].value
+        "element": selectElement.options[selectElement.selectedIndex].value,
     }
 
 	const exportedData = JSON.stringify(dataJson);
-    console.log(exportedData)
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(exportedData);
     //var save = document.getElementById('save') as HTMLButtonElement;
     var save = document.createElement('a');

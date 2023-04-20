@@ -4,6 +4,8 @@ import { Cube } from "./cube";
 export const Sheep : Model = {
     "name" : "Body",
     "shape" : Cube,
+    "shading": true,
+    "textureType": 0,
     "translation" : [40, -40, -10],
     "rotation" : [0, 0, 0],
     "scale" : [2, 0.7, 1.1],
@@ -11,6 +13,8 @@ export const Sheep : Model = {
         {
             "name" : "Head",
             "shape" : Cube,
+            "shading": true,
+            "textureType": 0,
             "translation" : [120,0, 0],
             "rotation" : [0, 0, 0],
             "scale" : [0.8, 0.8, 0.8],
@@ -19,6 +23,8 @@ export const Sheep : Model = {
         {
             "name" : "Left Back Leg",
             "shape" : Cube,
+            "shading": true,
+            "textureType": 0,
             "translation" : [-150, -172.5, -40],
             "rotation" : [0, 0, 0],
             "scale" : [0.3, 1.25, 0.3],
@@ -27,6 +33,8 @@ export const Sheep : Model = {
         {
             "name" : "Right Back Leg",
             "shape" : Cube,
+            "shading": true,
+            "textureType": 0,
             "translation" : [-150, -172.5, 40],
             "rotation" : [0, 0, 0],
             "scale" : [0.3, 1.25, 0.3],
@@ -35,6 +43,8 @@ export const Sheep : Model = {
         {
             "name" : "Left Front Leg",
             "shape" : Cube,
+            "shading": true,
+            "textureType": 0,
             "translation" : [60, -172.5, -40],
             "rotation" : [0, 0, 0],
             "scale" : [0.3, 1.25, 0.3],
@@ -43,6 +53,8 @@ export const Sheep : Model = {
         {
             "name" : "Right Front Leg",
             "shape" : Cube,
+            "shading": true,
+            "textureType": 0,
             "translation" : [60, -172.5, 40],
             "rotation" : [0, 0, 0],
             "scale" : [0.3, 1.25, 0.3],

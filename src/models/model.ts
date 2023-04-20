@@ -9,6 +9,7 @@ export default class Model {
 	program?: WebGLProgram;
 	location?: WebGlLocation;
 	nameComponent?: string;
+	shading?: boolean;
 
 	name: string = "Model";
 	// shape for vertices etc
@@ -40,6 +41,7 @@ export default class Model {
 	children: Model[] = [];
 
 	textures?: WebGLTexture[];
+	textureType?: number;
 
 	tangentBuffer?: WebGLBuffer;
 	bitangentBuffer?: WebGLBuffer;
@@ -156,6 +158,47 @@ export default class Model {
 			const ysRotate = document.getElementById("rotate-y-s") as HTMLInputElement;
 			const zsRotate = document.getElementById("rotate-z-s") as HTMLInputElement;
 			this.rotation = [+xsRotate.value, +ysRotate.value, +zsRotate.value];
+		}
+
+		let shading = document.getElementById(
+			"shading"
+		) as HTMLInputElement
+		var tempShading = shading.checked;
+
+		if(tempShading) {
+			this.gl!.uniform1i(this.location!.shading, Number(1));
+		} else {
+			if(componentActive === this.nameComponent) {
+				const shadingCildren = document.getElementById("shading-children") as HTMLInputElement;
+				this.shading = shadingCildren.checked;
+				this.gl!.uniform1i(this.location!.shading, Number(this.shading));
+			} else {
+
+			}
+			this.gl!.uniform1i(this.location!.shading, Number(this.shading));
+		}
+
+		var textureChoices = document.getElementById("texture-choices") as HTMLSelectElement;
+		var temp = Number(textureChoices.options[textureChoices.selectedIndex].value);
+
+		if(componentActive === this.nameComponent) {
+			const textureTypeInput = document.getElementById("texture-choices-children") as HTMLSelectElement;
+			if(Number(textureTypeInput.options[textureTypeInput.selectedIndex].value) > 0) {
+				this.textureType = Number(textureTypeInput.options[textureTypeInput.selectedIndex].value);
+				this.gl?.uniform1i(this.location!.textureMode, Number(this.textureType));
+			} else if (temp > 0) {
+				this.gl?.uniform1i(this.location!.textureMode, Number(temp));
+			} else {
+				this.gl?.uniform1i(this.location!.textureMode, Number(0));
+			}
+		} else {
+			if(this.textureType! > 0) {
+				this.gl?.uniform1i(this.location!.textureMode, Number(this.textureType));
+			} else if (temp > 0) {
+				this.gl?.uniform1i(this.location!.textureMode, Number(temp));
+			} else {
+				this.gl?.uniform1i(this.location!.textureMode, Number(0));
+			}
 		}
 	}
 
@@ -381,11 +424,11 @@ export default class Model {
 		// set the light direction.
 		this.gl!.uniform3fv(this.location!.light, normalize([0.2, 0.4, 1]));
 
-		// Tell the shader to use texture unit 0 for u_texture
+		// Tell the shader to use texture unit 0 for u_texture		
 		this.gl!.uniform1i(this.location!.textureU, 0);
 
 		// set shading
-		this.gl!.uniform1i(this.location!.shading, Number(shading));
+		// this.gl!.uniform1i(this.location!.shading, Number(shading));
 
 		// set normal matrix
 		const viewModelMatrix = m4.multiply(viewMatrix, this.shape.positions);
@@ -445,8 +488,9 @@ export default class Model {
 		this.attachUI!();
 		this.bind!();
 		this.buffers!();
-		this.uniforms!(projectionMatrix, shading, cameraAngle, cameraRadius);
-		
+
+		this.uniforms!(projectionMatrix, this.shading!, cameraAngle, cameraRadius);
+
 		// draw
 		var primitiveType = this.gl!.TRIANGLES;
 		var offset = 0;
@@ -474,7 +518,7 @@ export default class Model {
 
 		// Enable the depth buffer
 		this.gl!.enable(this.gl!.DEPTH_TEST);
-		
+
 		this._recursiveDraw!(projectionMatrix, shading, cameraAngle, cameraRadius);
 	}
 

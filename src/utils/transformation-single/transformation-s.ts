@@ -17,11 +17,15 @@ export function addComponentButtonListener (document: Document, div: HTMLElement
   var ysRotate = document.getElementById("rotate-y-s") as HTMLInputElement;
   var zsRotate = document.getElementById("rotate-z-s") as HTMLInputElement;
 
+  var isShadingChildren = document.getElementById("shading-children") as HTMLInputElement;
+  var texturesChoicesParents = document.getElementById("texture-choices-children") as HTMLSelectElement;
+
   div.addEventListener("click", (e) => {
 
     e.preventDefault()
 
     // set to model value
+    console.log(model)
     xsControl.value = model.translation[0].toString();
     ysControl.value = model.translation[1].toString();
     zsControl.value = model.translation[2].toString();
@@ -34,7 +38,12 @@ export function addComponentButtonListener (document: Document, div: HTMLElement
     ysRotate.value = model.rotation[1].toString()
     zsRotate.value = model.rotation[2].toString()
 
+    isShadingChildren.checked = model.shading!
+    texturesChoicesParents.selectedIndex = model.textureType!
+
+
     title!.innerHTML = div.innerText
+    console.log(title)
     
     // toggleInput(inputs!)
   })

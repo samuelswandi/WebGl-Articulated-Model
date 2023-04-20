@@ -32,7 +32,6 @@ export default class WebGlManager {
 					program
 				)}`
 			);
-			console.log(this.gl.getProgramInfoLog(program));
 			return;
 		}
 
@@ -78,7 +77,6 @@ export default class WebGlManager {
 					shader
 				)}`
 			);
-			console.log(this.gl.getShaderInfoLog(shader));
 			this.gl.deleteShader(shader);
 		}
 

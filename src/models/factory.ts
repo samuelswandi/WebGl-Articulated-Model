@@ -33,7 +33,6 @@ export default class ModelFactory {
 	}
 
 	sheep(): Model {
-		console.log(Sheep)
 		return this._recursiveObjectFactory(this.manager, this.location, Sheep);
 	}
 
@@ -61,6 +60,8 @@ export default class ModelFactory {
 		res.rotation = model.rotation;
 		res.scale = model.scale;
 		res.nameComponent = model.nameComponent;
+		res.shading = model.shading;
+		res.textureType = model.textureType;
 
 		// children
 		for (let i = 0 ; i < model.children.length ; i++){
@@ -81,6 +82,8 @@ export default class ModelFactory {
 		res.rotation = model.rotation;
 		res.scale = model.scale;
 		res.nameComponent = model.name;
+		res.shading = model.shading;
+		res.textureType = model.textureType;
 
 		// children
 		for (let i = 0 ; i < model.children.length ; i++){
@@ -88,6 +91,7 @@ export default class ModelFactory {
 		}
 		return res;
 	}
+
 
 	_recursiveTransformationFactory
 	(
