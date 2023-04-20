@@ -127,13 +127,36 @@ export default class Model {
 		var yControl = document.getElementById("translate-y") as HTMLInputElement;
 		var zControl = document.getElementById("translate-z") as HTMLInputElement;
 
+		const componentActive = document.getElementById("component-title")?.innerText;
+		if (componentActive === this.nameComponent) {
+			const xsControl = document.getElementById("translate-x-s") as HTMLInputElement;
+			const ysControl = document.getElementById("translate-y-s") as HTMLInputElement;
+			const zsControl = document.getElementById("translate-z-s") as HTMLInputElement;
+			this.translation = [+xsControl.value, +ysControl.value, +zsControl.value];
+		}
+
 		this.deltaTranslation = [+xControl.value, +yControl.value, +zControl.value];
+		
+
 
 		var xScale = document.getElementById("scale-x") as HTMLInputElement;
 		var yScale = document.getElementById("scale-y") as HTMLInputElement;
 		var zScale = document.getElementById("scale-z") as HTMLInputElement;
+		if (componentActive === this.nameComponent) {
+			const xsScale = document.getElementById("scale-x-s") as HTMLInputElement;
+			const ysScale = document.getElementById("scale-y-s") as HTMLInputElement;
+			const zsScale = document.getElementById("scale-z-s") as HTMLInputElement;
+			this.scale = [+xsScale.value, +ysScale.value, +zsScale.value];
+		}
 
 		this.deltaScale = [+xScale.value, +yScale.value, +zScale.value];
+
+		if (componentActive === this.nameComponent) {
+			const xsRotate = document.getElementById("rotate-x-s") as HTMLInputElement;
+			const ysRotate = document.getElementById("rotate-y-s") as HTMLInputElement;
+			const zsRotate = document.getElementById("rotate-z-s") as HTMLInputElement;
+			this.rotation = [+xsRotate.value, +ysRotate.value, +zsRotate.value];
+		}
 	}
 
 	bind?() {

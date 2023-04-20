@@ -15,6 +15,7 @@ import { Fly } from "./test/fly";
 
 import Model from "./models/model";
 import { FlyAnimation } from "./test/animation/fly_animation";
+import { addComponentButtonListener } from "./utils/transformation-single/transformation-s";
 
 async function main() {
     let webGlManager = new WebGlManager();
@@ -106,31 +107,43 @@ async function main() {
         };
     }
 
-    const reload = () => {        
+    const reload = () => {
+        const modelFactory = new ModelFactory(webGlManager, webGlLocation);
         totalFrameText.textContent = (anim.length).toString();
-        let arrayOfChildren = `<div class="square ml-1">
-                                    ${model.nameComponent}
-                                </div>`;
+
+        let component = document.createElement("div");
+        component.innerText = model.nameComponent!;
+        component.classList.add("square")
+        component.classList.add("ml-1")
+        compSubTree.appendChild(component)
+
+        addComponentButtonListener(document, component, model)
         for(let i = 0; i < model.children.length; i++) {
-            arrayOfChildren += 
-                `<div class="square ml-2">
-                    ${model.children[i].nameComponent}
-                </div>`
-            
+            let component = document.createElement("div");
+            component.innerText = model.children[i].nameComponent!;
+            component.classList.add("square")
+            component.classList.add("ml-2")
+            compSubTree.appendChild(component)
+            addComponentButtonListener(document, component, model.children[i])
+
             for(let j = 0; j < model.children[i].children.length; j++) {
-                arrayOfChildren += 
-                    `<div class="square ml-3">
-                        ${model.children[i].children[j].nameComponent}
-                    </div>`
+                let component = document.createElement("div");
+                component.innerText = model.children[i].children[j].nameComponent!;
+                component.classList.add("square")
+                component.classList.add("ml-3")
+                compSubTree.appendChild(component)
+                addComponentButtonListener(document, component, model.children[i].children[j])
+
                 for(let k = 0; k < model.children[i].children[j].children.length; k++) {
-                    arrayOfChildren += 
-                        `<div class="square ml-4">
-                            ${model.children[i].children[j].children[k].nameComponent}
-                        </div>`
+                    let component = document.createElement("div");
+                    component.innerText = model.children[i].children[j].children[k].nameComponent!;
+                    component.classList.add("square")
+                    component.classList.add("ml-4")
+                    compSubTree.appendChild(component)
+                    addComponentButtonListener(document, component, model.children[i].children[j].children[k])
                 }
             }
         }
-        compSubTree.innerHTML = arrayOfChildren;
 
         nextFrame.onclick = () => {
             if (frameIdx < anim.length - 1) {
