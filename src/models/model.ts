@@ -38,7 +38,7 @@ export default class Model {
 	// Child models
 	children: Model[] = [];
 
-	textures: WebGLTexture[];
+	textures?: WebGLTexture[];
 
 	tangentBuffer?: WebGLBuffer;
 	bitangentBuffer?: WebGLBuffer;
@@ -65,7 +65,7 @@ export default class Model {
 		this.initMouse!();
 	}
 
-	changeCameraPersObl() {
+	changeCameraPersObl?() {
 		this.cameraAngle = degToRad(90);
 			let cAcontrol = document.getElementById(
 			"camera-angle"
@@ -174,12 +174,12 @@ export default class Model {
 		// Start binding the tangent buffers.
 		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.tangentBuffer!);
 		// Set the tangent.
-		this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(this.getTangent()), this.gl!.STATIC_DRAW);
+		this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(this.getTangent!()), this.gl!.STATIC_DRAW);
 		
 		// Start binding the bitangent buffers.
 		this.gl!.bindBuffer(this.gl!.ARRAY_BUFFER, this.bitangentBuffer!);
 		// Set the bitangent.
-		this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(this.getBitangent()), this.gl!.STATIC_DRAW);
+		this.gl!.bufferData(this.gl!.ARRAY_BUFFER, new Float32Array(this.getBitangent!()), this.gl!.STATIC_DRAW);
 	}
 
 	buffers?() {
@@ -347,15 +347,15 @@ export default class Model {
 		
 		this.gl!.uniform1i(this.location!.textureImage, 0);
 		this.gl!.activeTexture(this.gl!.TEXTURE0);
-		this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.textures[0]);
+		this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.textures![0]);
 
 		this.gl!.uniform1i(this.location!.textureEnvironment, 1);
 		this.gl!.activeTexture(this.gl!.TEXTURE1);
-		this.gl!.bindTexture(this.gl!.TEXTURE_CUBE_MAP, this.textures[1]);
+		this.gl!.bindTexture(this.gl!.TEXTURE_CUBE_MAP, this.textures![1]);
 
 		this.gl!.uniform1i(this.location!.textureBump, 2);
 		this.gl!.activeTexture(this.gl!.TEXTURE2);
-		this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.textures[2]);
+		this.gl!.bindTexture(this.gl!.TEXTURE_2D, this.textures![2]);
 	}
 
 	setGeometry?() {
@@ -431,7 +431,7 @@ export default class Model {
 		this._recursiveDraw!(projectionMatrix, shading, cameraAngle, cameraRadius);
 	}
 
-	public getTangent(): number[] {
+	public getTangent?(): number[] {
 		let vertexTangents: number[] = [];
 		for (let i = 0; i < this.shape.positions.length; i += 18) {
 			const p1 = [this.shape.positions[i], this.shape.positions[i+1], this.shape.positions[i+2]];
@@ -446,7 +446,7 @@ export default class Model {
 		return vertexTangents;
 	}
 
-	public getBitangent() : number[] {
+	public getBitangent?() : number[] {
 		let vertexBitangents: number[] = [];
 		for (let i = 0; i < this.shape.positions.length; i += 18) {
 			const p1 = [this.shape.positions[i], this.shape.positions[i+1], this.shape.positions[i+2]];

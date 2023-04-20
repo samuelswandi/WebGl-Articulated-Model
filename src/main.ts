@@ -9,6 +9,7 @@ import { Chicken } from "./test/chicken";
 import { Sheep } from "./test/sheep";
 import { Transformation, backwardSum, forwardSum, negate } from "./models/transformation";
 import { ManAnimation } from "./test/animation/man_animation";
+import { Fly } from "./test/fly";
 
 import Model from "./models/model";
 
