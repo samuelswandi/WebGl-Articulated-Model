@@ -4,231 +4,240 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/src/style.css" />
+		<style>@import url('https://fonts.cdnfonts.com/css/minecraft-4');</style>
 		<title></title>
 	</head>
 	<body>
-		<div id="app">
-			<canvas
-				id="canvas"
-				style="border: 1px solid black"
-				width="600"
-				height="600"
-			></canvas>
-		</div>
-
-		<div>
-			<div class="translate-x">
-				<label for="translate-x">Translate x</label>
-				<input
-					class="form-range"
-					type="range"
-					id="translate-x"
-					min="-200"
-					max="200"
-					value="0"
-					step="1"
-				/>
+		<h1 class="title">Dunia Menkrep</h1>
+		<div class="main-prog">
+			<div id="app">
+				<canvas
+					id="canvas"
+					style="border: 1px solid black"
+					width="600"
+					height="600"
+				></canvas>
 			</div>
-			<div class="translate-y">
-				<label for="translate-y">Translate y</label>
-				<input
-					class="form-range"
-					type="range"
-					id="translate-y"
-					min="-200"
-					max="200"
-					value="0"
-					step="1"
-				/>
-			</div>
-			<div class="translate-z">
-				<label for="translate-z">Translate z</label>
-				<input
-					class="form-range"
-					type="range"
-					id="translate-z"
-					min="-200"
-					max="200"
-					value="-10"
-					step="1"
-				/>
-			</div>
-
-			<!-- <div class="rotate-x">
-				<label for="rotate-x">Rotate x</label>
-				<input
-					class="form-range"
-					type="range"
-					id="rotate-x"
-					min="-360"
-					max="360"
-					value="0"
-					step="0.01"
-				/>
-			</div>
-			<div class="rotate-y">
-				<label for="rotate-y">Rotate y</label>
-				<input
-					class="form-range"
-					type="range"
-					id="rotate-y"
-					min="-360"
-					max="360"
-					value="0"
-					step="0.01"
-				/>
-			</div>
-			<div class="rotate-z">
-				<label for="rotate-z">Rotate z</label>
-				<input
-					class="form-range"
-					type="range"
-					id="rotate-z"
-					min="-360"
-					max="360"
-					value="0"
-					step="0.01"
-				/>
-			</div> -->
-
-			<div class="scale-x">
-				<label for="scale-x">Scale x</label>
-				<input
-					class="form-range"
-					type="range"
-					id="scale-x"
-					min="0"
-					max="5"
-					value="1"
-					step="0.01"
-				/>
-			</div>
-			<div class="scale-y">
-				<label for="scale-y">Scale y</label>
-				<input
-					class="form-range"
-					type="range"
-					id="scale-y"
-					min="0"
-					max="5"
-					value="1"
-					step="0.01"
-				/>
-			</div>
-			<div class="scale-z">
-				<label for="scale-z">Scale z</label>
-				<input
-					class="form-range"
-					type="range"
-					id="scale-z"
-					min="0"
-					max="5"
-					value="1"
-					step="0.01"
-				/>
-			</div>
-
-			<div>
-				<label for="shading">Shading</label>
-				<input id="shading" type="checkbox" checked="checked" />
-			</div>
-			<div class="camera-angle">
-				<label for="camera-angle"> camera angle</label>
-				<input
-					class="form-range"
-					type="range"
-					id="camera-angle"
-					min="-180"
-					max="180"
-					value="0"
-					step="1"
-				/>
-			</div>
-			<div class="camera-radius">
-				<label for="camera-radius">camera radius</label>
-				<input
-					class="form-range"
-					type="range"
-					id="camera-radius"
-					min="0"
-					max="1000"
-					value="600"
-					step="1"
-				/>
-			</div>
-			<div class="animation-columns">
+	
+			<div id="transformasi">
+				<div class="translate-x">
+					<label for="translate-x">Translate x</label>
+					<input
+						class="form-range"
+						type="range"
+						id="translate-x"
+						min="-200"
+						max="200"
+						value="0"
+						step="1"
+					/>
+				</div>
+				<div class="translate-y">
+					<label for="translate-y">Translate y</label>
+					<input
+						class="form-range"
+						type="range"
+						id="translate-y"
+						min="-200"
+						max="200"
+						value="0"
+						step="1"
+					/>
+				</div>
+				<div class="translate-z">
+					<label for="translate-z">Translate z</label>
+					<input
+						class="form-range"
+						type="range"
+						id="translate-z"
+						min="-200"
+						max="200"
+						value="-10"
+						step="1"
+					/>
+				</div>
+	
+				<!-- <div class="rotate-x">
+					<label for="rotate-x">Rotate x</label>
+					<input
+						class="form-range"
+						type="range"
+						id="rotate-x"
+						min="-360"
+						max="360"
+						value="0"
+						step="0.01"
+					/>
+				</div>
+				<div class="rotate-y">
+					<label for="rotate-y">Rotate y</label>
+					<input
+						class="form-range"
+						type="range"
+						id="rotate-y"
+						min="-360"
+						max="360"
+						value="0"
+						step="0.01"
+					/>
+				</div>
+				<div class="rotate-z">
+					<label for="rotate-z">Rotate z</label>
+					<input
+						class="form-range"
+						type="range"
+						id="rotate-z"
+						min="-360"
+						max="360"
+						value="0"
+						step="0.01"
+					/>
+				</div> -->
+	
+				<div class="scale-x">
+					<label for="scale-x">Scale x</label>
+					<input
+						class="form-range"
+						type="range"
+						id="scale-x"
+						min="0"
+						max="5"
+						value="1"
+						step="0.01"
+					/>
+				</div>
+				<div class="scale-y">
+					<label for="scale-y">Scale y</label>
+					<input
+						class="form-range"
+						type="range"
+						id="scale-y"
+						min="0"
+						max="5"
+						value="1"
+						step="0.01"
+					/>
+				</div>
+				<div class="scale-z">
+					<label for="scale-z">Scale z</label>
+					<input
+						class="form-range"
+						type="range"
+						id="scale-z"
+						min="0"
+						max="5"
+						value="1"
+						step="0.01"
+					/>
+				</div>
+	
 				<div>
-					<div class="horizontal-box justify-center">
-						<button id="play-button">⏵︎</button>
-						<button id="pause-button" disabled>⏸︎</button>
-						<button id="reverse-play-button">Reverse Play</button>
-						<p>Start Frame</p>
-						<input type="number" id="start-frame" />
-						<p>End Frame</p>
-						<input type="number" id="end-frame" />
-						<button id="loop-play-button">Loop Play</button>
-						<p>Frame Rate</p>
-						<input
-							type="range"
-							id="frame-rate"
-							min="0.05"
-							max="0.4"
-							value="0.2"
-							step="0.05"
-						/>
-						<span id="frame-rate-text">0.2</span>
-					</div>
-
-					<div class="horizontal-box justify-start">
-						<div class="horizontal-box half-width">
-							<button id="first-frame">&lt;&lt;</button>
-							<button id="prev-frame">&lt;</button>
-							<button id="next-frame">&gt;</button>
-							<option></option>
-							<button id="last-frame">&gt;&gt;</button>
+					<label for="shading">Shading</label>
+					<input id="shading" type="checkbox" checked="checked" />
+				</div>
+				<div class="camera-angle">
+					<label for="camera-angle"> camera angle</label>
+					<input
+						class="form-range"
+						type="range"
+						id="camera-angle"
+						min="-180"
+						max="180"
+						value="0"
+						step="1"
+					/>
+				</div>
+				<div class="camera-radius">
+					<label for="camera-radius">camera radius</label>
+					<input
+						class="form-range"
+						type="range"
+						id="camera-radius"
+						min="0"
+						max="1000"
+						value="600"
+						step="1"
+					/>
+				</div>
+				<div class="animation-columns">
+					<div>
+						<div class="horizontal-box justify-center">
+							<button id="play-button">⏵︎</button>
+							<button id="pause-button" disabled>⏸︎</button>
+							<button id="reverse-play-button">Reverse Play</button>
+							<p>Start Frame</p>
+							<input type="number" id="start-frame" />
+							<p>End Frame</p>
+							<input type="number" id="end-frame" />
+							<button id="loop-play-button">Loop Play</button>
+							<p>Frame Rate</p>
+							<input
+								type="range"
+								id="frame-rate"
+								min="0.05"
+								max="0.4"
+								value="0.2"
+								step="0.05"
+							/>
+							<span id="frame-rate-text">0.2</span>
 						</div>
-						<div>
-							You are now at frame
-							<span id="cur-frame-id">1</span> /
-							<span id="total-frame-id">X</span>
+	
+						<div class="horizontal-box justify-start">
+							<div class="horizontal-box half-width">
+								<button id="first-frame">&lt;&lt;</button>
+								<button id="prev-frame">&lt;</button>
+								<button id="next-frame">&gt;</button>
+								<option></option>
+								<button id="last-frame">&gt;&gt;</button>
+							</div>
+							<div>
+								You are now at frame
+								<span id="cur-frame-id">1</span> /
+								<span id="total-frame-id">X</span>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<div id="sub-tree">
-			<div>
-				<label>Model: </label>
-				<select name="" id="model">
-					<option value="chicken">Chicken</option>
-					<option value="man">Man</option>
-					<option value="sheep">Sheep</option>
-				</select>
+	
+			<div id="sub-tree">
+				<div>
+					<label>Model: </label>
+					<select name="" id="model">
+						<option value="chicken">Chicken</option>
+						<option value="man">Man</option>
+						<option value="sheep">Sheep</option>
+					</select>
+				</div>
+	
+				<div>
+					<label>Projection Type: </label>
+	
+					<select id="projection">
+						<option value="0">perspective</option>
+						<option value="1">orthographic</option>
+						<option value="2">oblique</option>
+					</select>
+				</div>
+	
+				<div>
+					<label>Texture Type: </label>
+					<select name="" id="texture-choices">
+						<option value="0">None</option>
+						<option value="1">Image</option>
+						<option value="2">Environment</option>
+						<option value="3">Bump</option>
+					</select>
+				</div>
+				<div>
+					<label for="myfile">Load</label>
+					<input type="file" id="load" name="Load">
+				</div>
+				<button id="save">Save</button>
 			</div>
-
-			<div>
-				<label>Projection Type: </label>
-
-				<select id="projection">
-					<option value="0">perspective</option>
-					<option value="1">orthographic</option>
-					<option value="2">oblique</option>
-				</select>
+			<div id="comp-sub-tree">
+				Halo
 			</div>
-
-			<div>
-				<label>Texture Type: </label>
-				<select name="" id="texture-choices">
-					<option value="0">None</option>
-					<option value="1">Image</option>
-					<option value="2">Environment</option>
-					<option value="3">Bump</option>
-				</select>
-			</div>
-		</div>
-		<div id="comp-sub-tree">
-			Halo
 		</div>
 	</body>
 	<script type="module" src="/src/main.ts"></script>
