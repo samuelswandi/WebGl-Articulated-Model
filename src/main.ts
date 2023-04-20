@@ -355,6 +355,8 @@ async function main() {
 
     changeModel.onchange = () => {
         webGlRenderer = new WebGlRenderer(webGlManager);
+        // reset active component
+        document.getElementById("component-title")!.innerText = "choose a component";
         if(changeModel.value === "chicken") {
             model = modelFactory.chicken();
             baseModel = Chicken;
