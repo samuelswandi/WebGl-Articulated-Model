@@ -36,6 +36,33 @@ async function main() {
     const lastFrame = document.getElementById("last-frame") as HTMLButtonElement;
     const nextFrame = document.getElementById("next-frame") as HTMLButtonElement;
     const prevFrame = document.getElementById("prev-frame") as HTMLButtonElement;
+    const compSubTree = document.getElementById("comp-sub-tree") as HTMLButtonElement;
+
+    console.log(model);
+    let arrayOfChildren = `<div class="square ml-1">
+                                ${model.nameComponent}
+                            </div>`;
+    for(let i = 0; i < model.children.length; i++) {
+        arrayOfChildren += 
+            `<div class="square ml-2">
+                ${model.children[i].nameComponent}
+            </div>`
+        
+        for(let j = 0; j < model.children[i].children.length; j++) {
+            arrayOfChildren += 
+                `<div class="square ml-3">
+                    ${model.children[i].children[j].nameComponent}
+                </div>`
+            for(let k = 0; k < model.children[i].children[j].children.length; k++) {
+                arrayOfChildren += 
+                    `<div class="square ml-4">
+                        ${model.children[i].children[j].children[k].nameComponent}
+                    </div>`
+            }
+        }
+    }
+    console.log(arrayOfChildren)
+    compSubTree.innerHTML = arrayOfChildren;
 
     nextFrame.onclick = () => {
         if (frameIdx < anim.length - 1) {

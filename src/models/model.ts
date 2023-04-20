@@ -8,6 +8,7 @@ export default class Model {
 	gl?: WebGLRenderingContext;
 	program?: WebGLProgram;
 	location?: WebGlLocation;
+	nameComponent?: string;
 
 	name: string = "Model";
 	// shape for vertices etc

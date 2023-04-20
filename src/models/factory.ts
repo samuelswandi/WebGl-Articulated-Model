@@ -33,6 +33,7 @@ export default class ModelFactory {
 	}
 
 	sheep(): Model {
+		console.log(Sheep)
 		return this._recursiveObjectFactory(this.manager, this.location, Sheep);
 	}
 
@@ -55,6 +56,7 @@ export default class ModelFactory {
 		res.translation = model.translation;
 		res.rotation = model.rotation;
 		res.scale = model.scale;
+		res.nameComponent = model.name;
 
 		// children
 		for (let i = 0 ; i < model.children.length ; i++){
