@@ -14,6 +14,7 @@ import { ManAnimation } from "./test/animation/man_animation";
 import { Fly } from "./test/fly";
 
 import Model from "./models/model";
+import { FlyAnimation } from "./test/animation/fly_animation";
 
 async function main() {
     let webGlManager = new WebGlManager();
@@ -21,7 +22,6 @@ async function main() {
     let webGlRenderer = new WebGlRenderer(webGlManager);
     
     const modelFactory = new ModelFactory(webGlManager, webGlLocation);
-    const selectModel = document.getElementById("texture-choices") as HTMLSelectElement;
 
     // TODO: Model Change , with Anim
     let model : Model = modelFactory.chicken();
@@ -293,6 +293,10 @@ async function main() {
             model = modelFactory.sheep();
             baseModel = Sheep;
             anim = SheepAnimation;
+        } else if (changeModel.value === "fly") {
+            model = modelFactory.fly();
+            baseModel = Fly;
+            anim = FlyAnimation;
         }
         webGlLocation = new WebGlLocation(webGlManager);
         webGlRenderer = new WebGlRenderer(webGlManager);
