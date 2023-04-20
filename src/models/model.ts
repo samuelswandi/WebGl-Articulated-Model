@@ -148,7 +148,7 @@ export default class Model {
 		const zsRotate = document.getElementById("rotate-z-s") as HTMLInputElement;
 		const singleTransformators = [xsControl, ysControl, zsControl, xsScale, ysScale, zsScale, xsRotate, ysRotate, zsRotate]
 		singleTransformators.forEach((element) => {
-			element.addEventListener("change", () => {
+			element.addEventListener("input", () => {
 				this.isTransformingSingle = true;
 			}
 		)})
