@@ -20,6 +20,8 @@ export function addComponentButtonListener (document: Document, div: HTMLElement
   var isShadingChildren = document.getElementById("shading-children") as HTMLInputElement;
   var texturesChoicesParents = document.getElementById("texture-choices-children") as HTMLSelectElement;
 
+  var reset = document.getElementById("reset") as HTMLButtonElement;
+
   div.addEventListener("click", (e) => {
 
     e.preventDefault()
@@ -41,9 +43,26 @@ export function addComponentButtonListener (document: Document, div: HTMLElement
     isShadingChildren.checked = model.shading!
     texturesChoicesParents.selectedIndex = model.textureType!
 
-
     title!.innerHTML = div.innerText
-    console.log(title)
+
+    reset.onclick = () => {
+      console.log(model)
+      xsControl.value = "0";
+      ysControl.value = "0";
+      zsControl.value = "0";
+
+      xsScale.value = "1";
+      ysScale.value = "1";
+      zsScale.value = "1";
+
+      xsRotate.value = "0";
+      ysRotate.value = "0";
+      zsRotate.value = "0";
+
+      isShadingChildren.checked = false
+      texturesChoicesParents.selectedIndex = 0
+
+    }
     
     // toggleInput(inputs!)
   })
