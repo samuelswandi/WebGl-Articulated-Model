@@ -148,14 +148,14 @@ async function main() {
         nextFrame.onclick = () => {
             if (frameIdx < anim.length - 1) {
                 frameIdx++;
-                model = modelFactory._recursiveTransformationFactory(anim[frameIdx], 0, baseModel)[0];
+                model = modelFactory._recursiveTransformationFactory(anim[frameIdx], 0, model)[0];
                 frameText.textContent = (frameIdx + 1).toString();
             }
         }
         
         prevFrame.onclick = () => {
             if (frameIdx > 0) {
-                model = modelFactory._recursiveTransformationFactory(anim[frameIdx].map((transformation) => negate(transformation)), 0, baseModel)[0];
+                model = modelFactory._recursiveTransformationFactory(anim[frameIdx].map((transformation) => negate(transformation)), 0, model)[0];
                 frameIdx--;
                 frameText.textContent = (frameIdx + 1).toString();
             }
@@ -164,7 +164,7 @@ async function main() {
         firstFrame.onclick = () => {
             if (frameIdx > 0) {
                 model = modelFactory._recursiveTransformationFactory(
-                    backwardSum(anim, 0, frameIdx), 0, baseModel)[0];
+                    backwardSum(anim, 0, frameIdx), 0, model)[0];
                 frameIdx = 0;
                 frameText.textContent = (frameIdx + 1).toString();
             }
@@ -173,7 +173,7 @@ async function main() {
         lastFrame.onclick = () => {
             if (frameIdx < anim.length - 1) {
                 model = modelFactory._recursiveTransformationFactory(
-                    forwardSum(anim, frameIdx, anim.length - 1), 0 ,baseModel)[0];
+                    forwardSum(anim, frameIdx, anim.length - 1), 0 ,model)[0];
                 frameIdx = anim.length - 1;
                 frameText.textContent = (frameIdx + 1).toString();
             }
@@ -287,7 +287,7 @@ async function main() {
                 if(globalTimer % Math.round(speed * 10) == 0){
                     if (frameIdx < anim.length - 1) {
                         frameIdx++;
-                        model = modelFactory._recursiveTransformationFactory(anim[frameIdx], 0, baseModel)[0];
+                        model = modelFactory._recursiveTransformationFactory(anim[frameIdx], 0, model)[0];
                         frameText.textContent = (frameIdx + 1).toString();
                         disableWhilePlaying();
                     }
@@ -303,7 +303,7 @@ async function main() {
             if (isPlayingReverse){
                 if(globalTimer % Math.round(speed * 10) == 0){
                     if (frameIdx > 0) {
-                        model = modelFactory._recursiveTransformationFactory(anim[frameIdx].map((transformation) => negate(transformation)), 0, baseModel)[0];
+                        model = modelFactory._recursiveTransformationFactory(anim[frameIdx].map((transformation) => negate(transformation)), 0, model)[0];
                         frameIdx--;
                         frameText.textContent = (frameIdx + 1).toString();
                         disableWhilePlaying();
@@ -321,9 +321,9 @@ async function main() {
                 if(globalTimer % Math.round(speed * 10) == 0){
                     frameIdx = ((frameIdx - startFrame) + 1) % (endFrame - startFrame + 1) + startFrame;
                     if (frameIdx == startFrame) {
-                        model = modelFactory._recursiveTransformationFactory(backwardSum(anim, startFrame, endFrame), 0, baseModel)[0];
+                        model = modelFactory._recursiveTransformationFactory(backwardSum(anim, startFrame, endFrame), 0, model)[0];
                     } else{
-                        model = modelFactory._recursiveTransformationFactory(anim[frameIdx], 0, baseModel)[0];
+                        model = modelFactory._recursiveTransformationFactory(anim[frameIdx], 0, model)[0];
                     }
                     frameText.textContent = (frameIdx + 1).toString();
                     disableWhilePlaying();
